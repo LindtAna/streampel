@@ -36,31 +36,7 @@ Das UI-Design basiert auf dem folgenden Figma-Template:
 ```
 Streampel ist nach funktionalen Bereichen in Ordnern organisiert:
 
-- ** **  
-  Beschreibung
-
-- **src**  
-  Quellcode der Anwendung  
-  - **components**  
-     Beschreibung
-  - **modules**  
-    
-  - **layouts**  
-    
-  - **pages**  
-    
-  - ** **  
-    
-  - **styles**  
-    
-  - ** **  
-    
-
-### Modulübersicht (s)
-- 
-- 
-- 
-- 
+   
 
 ## Technische Highlights
 
@@ -69,6 +45,7 @@ Streampel ist nach funktionalen Bereichen in Ordnern organisiert:
 - 
 
 Links zur Dokumentation der verwendeten Frameworks und Bibliotheken:
+
 React Native
 https://reactnative.dev/docs/environment-setup
 
@@ -82,6 +59,9 @@ https://www.nativewind.dev/docs/getting-started/installation
 Appwrite - Open-Source-Plattform BaaS
 https://cloud.appwrite.io/console/project-fra-68d2d4aa00337e093de3/get-started
 
+
+The Movie Database (TMDB) API
+https://developer.themoviedb.org/reference/intro/getting-started
 
 A flexible way to handle safe area insets in JS
 https://github.com/AppAndFlow/react-native-safe-area-context
