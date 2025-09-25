@@ -65,3 +65,5 @@ https://developer.themoviedb.org/reference/intro/getting-started
 
 A flexible way to handle safe area insets in JS
 https://github.com/AppAndFlow/react-native-safe-area-context
+
+git config --global core.autocrlf input
