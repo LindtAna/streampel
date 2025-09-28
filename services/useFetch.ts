@@ -30,6 +30,7 @@ const useFetch = <T>(fetchFunction: () => Promise<T>, autoFetch = true) => {
 
             // fetchFunction enthält die Logik der API-Anfrage, die Daten zurückgibt
             const result = await fetchFunction();
+            // setData(Array.isArray(result) ? result : []);
             // Speichert die empfangenen Daten im Zustand
             setData(result);
 

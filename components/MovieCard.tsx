@@ -16,9 +16,11 @@ const MovieCard = ({ id, poster_path, title, vote_average, release_date }: Movie
                     source={{
                         uri: poster_path
                             ? `https://image.tmdb.org/t/p/w500${poster_path}`
-                            : 'https://placehold.co/600x400/0f0D23/ffffff.png'
+                            : 'https://dummyimage.com/200x400/0f0D23/6398ef.png&text=No+Poster+Available'
+                           
+                            // 0f0D23/6398ef
                     }}
-                    className="w-full h-40 rounded-lg"
+                    className="w-full h-52 rounded-lg"
                     resizeMode="cover"
                 />
                 {/* Zeigt den Filmtitel an
@@ -46,7 +48,7 @@ export default MovieCard
 
 // poster_path: https://developer.themoviedb.org/docs/image-basics
 
-//https://placehold.co/600x400/1a1a1a/ffffff.png -> generiert von placehold.co
+//https://dummyimage.com/200x400/0f0D23/6398ef.png&text=No+Poster+Available -> generiert von https://dummyimage.com/
 
 // damit Tailwind Image im /components verarbeiten kann, muss in tailwind.config.js in content die Zeile für "./components/**/*.{js,jsx,ts,tsx}" hinzugefügt werden
 

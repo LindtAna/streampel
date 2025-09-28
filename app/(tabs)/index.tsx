@@ -51,7 +51,7 @@ export default function Index() {
             {...item}
              />
           )}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item, index) => (item.id ? item.id.toString() : `fallback-${index}`)}
           numColumns={3}
           columnWrapperStyle = {
             {
