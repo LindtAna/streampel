@@ -20,7 +20,7 @@ headers: {
 
 // Funktion zum Abrufen populärer Filme oder zur Durchführung einer Suche nach einer Anfrage
 // Akzeptiert ein Objekt mit dem Parameter query (Suchstring, optional)
-export const fetchPopularMovies = async({query}: {query: string}) => {
+export const fetchMovies = async({query}: {query: string}) => {
 
     // Wenn query vorhanden ist, verwenden wir den Suchendpunkt für Filme mit dem Parameter query
     // Wenn query fehlt, fordern wir eine Liste populärer Filme an, sortiert nach Popularität
