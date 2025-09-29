@@ -1,31 +1,30 @@
 // Objekt, enthält Konfigurationsdaten für die Arbeit mit der TMDB API
-export const TMDB_CONFIG = {
 // Basis-URL für alle Anfragen an die TMDB API
-    // Alle API-Endpunkte beginnen mit dieser Adresse, wird zur Bildung vollständiger URLs verwendet
+// Alle API-Endpunkte beginnen mit dieser Adresse, wird zur Bildung vollständiger URLs verwendet
+// API-Schlüssel aus .env holen (für Sicherheit)
+// process.env ermöglicht das dynamische Laden von Umgebungsvariablen beim Start der Anwendung 
+export const TMDB_CONFIG = {
     BASE_URL: 'https://api.themoviedb.org/3/',
-
-   // API-Schlüssel aus .env holen (für Sicherheit)
-    // process.env ermöglicht das dynamische Laden von Umgebungsvariablen beim Start der Anwendung 
     API_KEY: process.env.EXPO_PUBLIC_MOVIE_API_KEY,
 
 // Kopfzeilen, die mit jeder Anfrage an die API gesendet werden, Antwort im JSON-Format
+// Bilden der Authorization-Kopfzeile mit einem Bearer-Token
+// TMDB API erfordert Autorisierung über Bearer-Token für den Datenzugriff
+// Token wird aus der Umgebungsvariable geladen, um ihn nicht im Code zu duplizieren
 headers: {  
         accept: 'application/json',
-        // Bilden der Authorization-Kopfzeile mit einem Bearer-Token
-        // TMDB API erfordert Autorisierung über Bearer-Token für den Datenzugriff
-        // Token wird aus der Umgebungsvariable geladen, um ihn nicht im Code zu duplizieren/
         Authorization: `Bearer ${process.env.EXPO_PUBLIC_MOVIE_API_KEY}`,
        },
    };
 
+
 // Funktion zum Abrufen populärer Filme oder zur Durchführung einer Suche nach einer Anfrage
 // Akzeptiert ein Objekt mit dem Parameter query (Suchstring, optional)
+// Wenn query vorhanden ist, verwenden wir den Suchendpunkt für Filme mit dem Parameter query
+// Wenn query fehlt, fordern wir eine Liste populärer Filme an, sortiert nach Popularität
 export const fetchMovies = async({query}
     : {query: string}) => {
-
-    // Wenn query vorhanden ist, verwenden wir den Suchendpunkt für Filme mit dem Parameter query
-    // Wenn query fehlt, fordern wir eine Liste populärer Filme an, sortiert nach Popularität
- const endpoint = query
+     const endpoint = query
  ? `${TMDB_CONFIG.BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
  
  : `${TMDB_CONFIG.BASE_URL}/discover/movie?sort_by=popularity.desc`;
@@ -46,13 +45,34 @@ if(!response.ok){
     throw new Error('Failed to fetch movies!!', response.statusText );
  }
 
-
- // Parsen der Serverantwort im JSON-Format
- const data = await response.json();
-
+// Parsen der Serverantwort im JSON-Format
 // TMDB API gibt ein Objekt mit dem Feld results zurück
 // Geben ein Array von Filmen aus der Eigenschaft results zurück
- return data.results;
+const data = await response.json();
+return data.results;
+
+}
+
+
+export const fetchMovieDetails = async(movieId: string): Promise<MovieDetails> => {
+try{
+const response = await fetch(`${TMDB_CONFIG.BASE_URL}/movie/${movieId}?api_key=${TMDB_CONFIG.API_KEY}`,
+    {method: 'GET',
+     headers: TMDB_CONFIG.headers,
+    }
+);
+
+if(!response) throw new Error('Failed to fetch movie details!');
+
+const data = await response.json();
+
+return data;
+
+}catch(error){
+    console.log(error);
+    throw(error);
+}
+
 
 }
 

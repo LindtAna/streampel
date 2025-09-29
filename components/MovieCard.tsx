@@ -7,12 +7,11 @@ import { Image, Text, TouchableOpacity, View } from "react-native";
 const MovieCard = ({ id, poster_path, title, vote_average, release_date }: Movie) => {
     return (
        // asChild übergibt die Steuerung an das child-Element (TouchableOpacity), um Klicks zu verarbeiten
+       //* TouchableOpacity -> klickbare Karte mit einem Schattensseffekt beim Drücken w-[30%] - 30% der Breite des Parent-Containers
+        // Wenn es poster_path gibt, wird die TMDb-URL verwendet, sonst placeholder
        <Link href={`/movies/${id}`} asChild>
-            {/* TouchableOpacity -> klickbare Karte mit einem Schattensseffekt beim Drücken
-            w-[30%] - 30% der Breite des Parent-Containers*/}
             <TouchableOpacity className="w-[30%]">
                 <Image
-                    // Wenn es poster_path gibt, wird die TMDb-URL verwendet, sonst placeholder
                     source={{
                         uri: poster_path
                             ? `https://image.tmdb.org/t/p/w500${poster_path}`
