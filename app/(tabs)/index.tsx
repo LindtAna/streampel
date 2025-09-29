@@ -52,13 +52,13 @@ export default function Index() {
         ) : <View className="flex-1 mt-5">
           <SearchBar
             onPress={() => router.push("/search")}
-            placeholder="Search for a movie"
+            placeholder="Suche"
           />
-          
+
            {/* Container für die Überschrift der Trendfilme */}
           {trendingMovies && (
             <View className="mt-10">
-              <Text className="text-lg text-light-200 font-bold mb-3">Trending Movies</Text>
+              <Text className="text-lg text-light-200 font-bold mb-3">Populäre Filme</Text>
             </View>
           )}
 
@@ -77,7 +77,7 @@ export default function Index() {
 
             />
             <Text className="text-lg text-light-200 font-bold mt-5 mb-3"
-            >Latest Movies</Text>
+            >Neuerscheinungen</Text>
             <FlatList
               data={movies}
               renderItem={({ item }) => (

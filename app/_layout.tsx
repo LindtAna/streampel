@@ -5,9 +5,7 @@ import './globals.css';
 export default function RootLayout() {
   return (
   <>
-
   <StatusBar hidden={true} />
-  
   <Stack>
         <Stack.Screen
           name="(tabs)"
