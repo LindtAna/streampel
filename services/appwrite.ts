@@ -62,7 +62,27 @@ export const updateSearchCount = async (query: string, movie: Movie) => {
     }
 
 }
+// Funktion zum Abrufen der sieben meistgesuchten Filme aus der Appwrite-Datenbank
+// Begrenzt auf 7 Dokumente, sortiert nach nach absteigendem count-Wert
+export const getTrendingMovies = async(): Promise<TrendingMovie[] | undefined> => {
+    try{
+        const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
+            Query.limit(7),
+            Query.orderDesc('count'),
+        ])
+
+        return result.documents as unknown as TrendingMovie[];
+
+    } catch(error){
+        console.log(error);
+        return undefined;
+    }
+}
 
 
 // if a document is found increment the searchCound field
 // if no document is found -> create a new document in Appwrite database -> 1
+
+
+// Appwrite - Open-Source-Plattform BaaS
+// https://cloud.appwrite.io/console/project-fra-68d2d4aa00337e093de3/get-started
