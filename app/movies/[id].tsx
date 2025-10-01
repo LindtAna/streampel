@@ -75,15 +75,16 @@ const MovieDetails = () => {
             </ScrollView>
             {/* Klickbare Schaltfläche für die Rückkehr zur vorherigen Seite */}
             <TouchableOpacity
-                className="absolute bottom-5 left-0 right-0 mx-5 bg-dark-200 rounded-lg py-3.5 flex flex-row items-center justify-center z-50"
+                className="absolute bottom-14 left-0 right-0 mx-5 bg-dark-200 rounded-full
+                 py-3.5 flex flex-row items-center justify-center z-50"
                 onPress={router.back}
             >
                 <Image
                     source={icons.arrow}
                     className="size-5 mr-1 mt-0.5 rotate-180"
-                    tintColor="#fff"
+                    tintColor="#bddeff"
                 />
-                <Text className="text-white font-semibold text-base">Zurück</Text>
+                <Text className="color-light-100 font-semibold text-base">Zurück</Text>
             </TouchableOpacity>
         </View>
     )

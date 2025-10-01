@@ -19,13 +19,13 @@ const CustomButton = ({
     isLoading= false}: CustomButtonProps) => {
 
   return (
-   <TouchableOpacity className="bg-light-200 rounded-full p-3 w-full flex flex-row justify-center" onPress={onPress}>
+   <TouchableOpacity className="bg-dark-200 rounded-full p-3 w-full flex flex-row justify-center" onPress={onPress}>
     {leftIcon}
     <View className="flex items-center justify-center flex-row">
 {isLoading ? (
   <ActivityIndicator size="small" color="white" />
 ): (
-<Text className={cn('text-white-100 paragraph-semibold', textStyle)}>
+<Text className={cn('color-light-100 font-semibold text-base', textStyle)}>
                         {title}
                     </Text>
 )}

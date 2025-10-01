@@ -74,7 +74,7 @@ const Search = () => {
                             <Image source={icons.logo} className="w-17 h-10" />
                         </View>
 
-                        <View className="my-5">
+                        <View className="mt-10">
                             <SearchBar placeholder="Suche"
                                 value={searchQuery}
                                 onChangeText={(text: string) => setSearchQuery(text)}

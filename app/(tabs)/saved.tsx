@@ -1,11 +1,11 @@
 import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
 import { Image, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context"; // Добавляем SafeAreaView
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Saved = () => {
   return (
-    <SafeAreaView className="bg-primary flex-1"> {/* Заменяем View на SafeAreaView */}
+    <SafeAreaView className="bg-primary flex-1"> 
       {/* hitergrund bild */}
       <Image source={images.bg} className="absolute w-full" />
 
