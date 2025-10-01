@@ -3,6 +3,7 @@ import CustomButton from "@/components/CustomButton";
 import CustomInput from "@/components/CustomInput";
 import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
+import { createUser } from "@/services/appwrite";
 import { router } from "expo-router";
 import { useState } from "react";
 import { Alert, Image, Text, View } from "react-native";
@@ -16,22 +17,26 @@ const SignUp = () => {
   const[form, setForm] = useState({name: '', email:'', password:''});
   
 // Asynchrone Funktion zur Verarbeitung des Formularversands
-  // Überprüfung, ob alle Formularfelder ausgefüllt sind
+// Überprüfung, ob alle Formularfelder ausgefüllt sind
   const submit = async () => {
+
     if(!form.name || !form.email || !form.password)return Alert.alert('Error', 'Please Enter valid email address and password');
 
 // Setzen von isSubmitting auf true, um Ladeindikator anzuzeigen
     setIsSubmitting(true) 
 
-    try{
-// Platz für den Aufruf der Registrierungsfunktion von Appwrite (Backend-Service)
-      // Hier wird die Logik zum Senden der Daten an den Server implementiert
 
-     
-    
-  // Wenn die Registrierung erfolgreich ist, zeigen wir eine Benachrichtigung an und leiten zur Profilseite weiter
-      // In jedem Fall (Erfolg oder Fehler) wird der Ladeindikator entfernt
-      Alert.alert('Success', 'User signed up successfuly');
+//Aufruf der Registrierungsfunktion von Appwrite (Backend-Service)
+// Senden der Daten an den Server
+// Wenn die Registrierung erfolgreich ist, leiten zur Profilseite weiter
+// In jedem Fall (Erfolg oder Fehler) wird der Ladeindikator entfernt
+    try{
+
+      await createUser({
+        email:form.email,
+        password: form.password,
+        name: form.name
+      })
       router.replace('/profile');
     } catch(error: any){
       Alert.alert('Error', error.message);
