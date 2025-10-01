@@ -8,7 +8,7 @@ const TabIcon = ({ focused, icon, title }: any) => {
     if (focused) {
         return (
             <ImageBackground
-                source={images.highlight}
+                source={images.tabsbarbutton}
                 className="flex flex-row w-full flex-1
                         min-w-[80px] min-h-14 mt-4 justify-center items-center
                         rounded-full overflow-hidden"
@@ -39,11 +39,12 @@ const _Layout = () => {
                     justifyContent: "center",
                     alignItems: "center",
                 },
+                // Tabs bar layout, styles
                 tabBarStyle: {
-                    backgroundColor: "#0f0D23", 
+                    backgroundColor: "#0e0454", 
                     borderRadius: 50,
                     marginHorizontal: 10,
-                    marginBottom: 36,
+                    marginBottom: 60,
                     height: 52,
                     position: "absolute",
                     overflow: "hidden",

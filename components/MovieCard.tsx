@@ -44,7 +44,6 @@ const MovieCard = ({ id, poster_path, title, vote_average, release_date }: Movie
 
 export default MovieCard
 
-
 // poster_path: https://developer.themoviedb.org/docs/image-basics
 
 //https://dummyimage.com/200x400/0f0D23/6398ef.png&text=No+Poster+Available -> generiert von https://dummyimage.com/
