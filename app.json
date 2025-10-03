@@ -5,8 +5,13 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/logo.png",
+    "backgroundColor": "#030014",
     "scheme": "movies",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "dark",
+    "splash": {
+        "backgroundColor": "#030014",
+        "image": "./assets/images/logo.png"
+      },
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
@@ -14,12 +19,17 @@
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#030014",
-        "foregroundImage": "./assets/images/logo.png",
-        "backgroundImage": "./assets/images/logo.png",
-        "monochromeImage": "./assets/images/logo.png"
+        "foregroundImage": "./assets/images/logo.png"
+        // "backgroundImage": "./assets/images/logo.png",
+        // "monochromeImage": "./assets/images/logo.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "splash": {
+        "backgroundColor": "#030014",
+        "image": "./assets/images/logo.png",
+        "resizeMode": "cover"
+      }
     },
     "web": {
       "output": "static",
@@ -31,11 +41,20 @@
         "expo-splash-screen",
         {
           "image": "./assets/images/logo.png",
-          "imageWidth": 400,
-          "resizeMode": "contain",
+          // "imageWidth": 400,
+          // "resizeMode": "cover",
           "backgroundColor": "#030014",
           "dark": {
-            "backgroundColor": "#030014"
+            "backgroundColor": "#030014",
+            "image": "./assets/images/logo.png",
+            "imageWidth": 400,
+            "resizeMode": "cover"
+          },
+          "android": {
+            "backgroundColor": "#030014",
+            "image": "./assets/images/logo.png"
+            // "imageWidth": 400,
+            // "resizeMode": "cover"
           }
         }
       ]

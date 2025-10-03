@@ -94,4 +94,4 @@ const SignUp = () => {
 
 export default SignUp;
 
-//Залогиниться
+//Registrierung

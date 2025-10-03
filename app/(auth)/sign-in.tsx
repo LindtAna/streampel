@@ -2,6 +2,7 @@ import CustomButton from "@/components/CustomButton";
 import CustomInput from "@/components/CustomInput";
 import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
+import { signIn } from "@/services/appwrite";
 import { Link, router } from "expo-router";
 import { useState } from "react";
 import { Alert, Image, Text, View } from "react-native";
@@ -16,19 +17,19 @@ const SignIn = () => {
 // Asynchrone Funktion zur Verarbeitung des Formularversands
   // Überprüfung, ob alle Formularfelder ausgefüllt sind
   const submit = async () => {
+  
     if(!form.email || !form.password) return Alert.alert('Error', 'Please Enter valid email address and password');
 
 // Setze isSubmitting auf true, um den Ladeindikator anzuzeigen
     setIsSubmitting(true)
 
+// Aufruf der Anmeldefunktion von Appwrite (Backend-Service)
+// Wenn die Anmeldung erfolgreich ist, wird zur Profilseite weitergeleitet
+// In jedem Fall (Erfolg oder Fehler) wird der Ladeindikator entfernt 
     try{
+await signIn({ email:form.email,
+        password: form.password});
 
-// Platz für den Aufruf der Anmeldefunktion von Appwrite (Backend-Service)
-      // Hier wird die Logik zum Senden der Daten an den Server implementiert
-
-      // Wenn die Anmeldung erfolgreich ist, zeige eine Benachrichtigung und leite zur Profilseite weiter
-      // In jedem Fall (Erfolg oder Fehler) wird der Ladeindikator entfernt 
-      Alert.alert('Success', 'User signed in successfuly');
       router.replace('/profile');
     } catch(error: any){
       Alert.alert('Error', error.message);
@@ -82,5 +83,3 @@ const SignIn = () => {
 };
 
 export default SignIn;
-
-//Войти

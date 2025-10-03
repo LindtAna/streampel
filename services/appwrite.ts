@@ -1,32 +1,36 @@
 import { Account, Avatars, Client, Databases, ID, Query } from 'react-native-appwrite';
 
-// Verfolgt die vom Benutzer durchgeführten Suchen
-// IDs für Datenbank und Table
-// Werte werden aus .env-Datei für sichere Konfiguration entnommen
-// ID Database & ID Table in Appwrite
+// Konstanten für die Identifikatoren der Datenbank und Sammlungen, die aus .env bezogen werden
+// ID der Datenbank zur Speicherung von Suchanfragen
+// ID der Tabelle für Suchanfragen
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
 const COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
+// ID der Datenbank für Benutzer
+// ID der Tabelle für Benutzerdaten
 const DATABASE_USERS_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_USER_ID!;
 const COLLECTION_USERS_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_USER_ID!;
 
-// Erstellung einer neuen Instanz des Appwrite-Clients
-// Festlegen der Server-URL von Appwrite (Cloud-Version)
-// Festlegen der Projekt-ID von Appwrite
-// Initialisierung eines Objekts für die Arbeit mit der Appwrite-Datenbank
-// Übergabe des Clients zur Authentifizierung von Anfragen
+// Erstellung einer Instanz des Appwrite-Clients zur Interaktion mit dem Server
+// Festlegen der URL des Appwrite-Servers
+// Festlegen der Projekt-ID aus .env
+// Festlegen der Plattform der App
 const client = new Client()
     .setEndpoint('https://cloud.appwrite.io/v1')
     .setProject(process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!)
     .setPlatform('com.lindtana.streampel')
 
+// Initialisierung von Objekten für die Arbeit mit Konten, Datenbank und Avataren
 export const account = new Account(client)
 const database = new Databases(client);
 const avatars = new Avatars(client)
 
-//SAVING USER SEARCH QUESTIONS IN A DATABANK
-// Initialisierung eines Objekts für die Arbeit mit der Appwrite-Datenbank
-// Abfrage von Dokumenten in der Sammlung
-// Filter: Suche nach Dokumenten, bei denen searchTerm mit der Anfrage übereinstimmt
+
+//////// SPEICHERN DER SUCHANFRAGEN DES BENUTZERS IN EINER DATENBANK /////////
+
+// Suche nach Dokumenten in der Sammlung, die der übergebenen Suchanfrage entsprechen
+// Überprüfung, ob bereits ein Eintrag für die gegebene Suchanfrage existiert
+// Aktualisierung des bestehenden Dokuments, Erhöhung des Suchzählers um 1
+// Falls kein Eintrag gefunden wurde, Erstellung eines neuen Dokuments in der Sammlung mit einer eindeutigen ID
 export const updateSearchCount = async (query: string, movie: Movie) => {
     try {
 
@@ -34,12 +38,9 @@ export const updateSearchCount = async (query: string, movie: Movie) => {
             Query.equal('searchTerm', query)
         ])
 
-        // Überprüfen, ob bereits ein Eintrag für die Suchanfrage existiert
-        // Wenn ein Eintrag gefunden wurde, nehmen wir das erste Dokument
         if (result.documents.length > 0) {
             const existingMovie = result.documents[0];
 
-            // Aktualisieren des bestehenden Eintrags in der Tabelle, Erhöhung des Zählers (count) um 1
             await database.updateDocument(
                 DATABASE_ID,
                 COLLECTION_ID,
@@ -50,8 +51,6 @@ export const updateSearchCount = async (query: string, movie: Movie) => {
             )
         }
         else {
-            // Wenn kein Eintrag gefunden wurde, erstellen wir ein neues Dokument in der Sammlung
-            // Generieren einer eindeutigen ID für den neuen Eintrag in der Tabelle
             await database.createDocument(DATABASE_ID, COLLECTION_ID, ID.unique(), {
                 searchTerm: query,
                 movie_id: movie.id,
@@ -69,8 +68,10 @@ export const updateSearchCount = async (query: string, movie: Movie) => {
 }
 
 
-// Abrufen der sieben meistgesuchten Filme aus der Appwrite-Datenbank
-// Begrenzt auf 7 Dokumente, sortiert nach nach absteigendem count-Wert
+/////// ABRUFEN DER SIEBEN MEISTGESUCHTEN FILME AUS DER APPWRITE-DATENBANK///////
+
+// Begrenzt auf 7 Dokumente, sortiert nach absteigendem count-Wert
+// Rückgabe der Liste von Dokumenten als Array von TrendingMovie-Objekten
 export const getTrendingMovies = async (): Promise<TrendingMovie[] | undefined> => {
     try {
         const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
@@ -87,7 +88,7 @@ export const getTrendingMovies = async (): Promise<TrendingMovie[] | undefined> 
 }
 
 
-//AUTHENTICATION
+///////// AUTHENTICATION & ANMELDUNG /////////
 interface CreateUserParams {
     email: string;
     password: string;
@@ -99,12 +100,8 @@ interface SignInParams {
     password: string;
 }
 
-interface GetMenuParams {
-    category: string;
-    query: string;
-}
-
-
+// Erstellung eines neuen Kontos in Appwrite mit einer eindeutigen ID, E-Mail, Passwort und Namen
+// Durchführung der Anmeldung mit den soeben erstellten Zugangsdaten
 export const createUser = async ({ email, password, name }: CreateUserParams) => {
     try {
         const newAccount = await account.create(ID.unique(), email, password, name)
@@ -122,6 +119,7 @@ export const createUser = async ({ email, password, name }: CreateUserParams) =>
                 accountId: newAccount.$id,
                 email,
                 name,
+                password, // später entfernen!!!
                 avatar: avatarUrl
             });
 
@@ -131,9 +129,10 @@ export const createUser = async ({ email, password, name }: CreateUserParams) =>
     }
 }
 
+// Anmeldung eines bestehenden Benutzers im System
 export const signIn = async ({ email, password }: SignInParams) => {
     try {
-        // Forcefully terminate the current session (for testing)
+        // beendigung der aktuellen sitzung (f/tests)
         await account.deleteSession('current');
         console.log('The current session has ended.');
     } catch (error: any) {
@@ -146,6 +145,26 @@ export const signIn = async ({ email, password }: SignInParams) => {
         const session = await account.createEmailPasswordSession(email, password);
         return session;
     } catch (er) {
+        throw new Error(er as string);
+    }
+}
+
+// Abrufen von Informationen über den aktuellen Benutzer
+// Abrufen der Daten des aktuellen Kontos, Suche nach dem Benutzereintrag in der Datenbank anhand der Konto-ID
+export const getCurrnetUser = async () => {
+try{
+    const currentAccount = await account.get()
+    if(!currentAccount) throw Error;
+    const currentUser = await database.listDocuments(
+        DATABASE_USERS_ID,
+        COLLECTION_USERS_ID,
+        [Query.equal("accountId", currentAccount.$id)]
+    )
+    if(!currentUser) throw Error;
+
+    return currentUser.documents[0];
+    
+}catch (er) {
         throw new Error(er as string);
     }
 }
