@@ -100,6 +100,13 @@ interface SignInParams {
     password: string;
 }
 
+interface User {
+    accountId?: string;
+    name: string;
+    email: string;
+    avatar?: string;
+}
+
 // Erstellung eines neuen Kontos in Appwrite mit einer eindeutigen ID, E-Mail, Passwort und Namen
 // Durchführung der Anmeldung mit den soeben erstellten Zugangsdaten
 export const createUser = async ({ email, password, name }: CreateUserParams) => {
@@ -132,18 +139,7 @@ export const createUser = async ({ email, password, name }: CreateUserParams) =>
 // Anmeldung eines bestehenden Benutzers im System
 export const signIn = async ({ email, password }: SignInParams) => {
     try {
-        // beendigung der aktuellen sitzung (f/tests)
-        await account.deleteSession('current');
-        console.log('The current session has ended.');
-    } catch (error: any) {
-        if (error.code !== 404) {  
-            console.error('Session termination error:', error);
-        }
-    }
-    
-    try {
-        const session = await account.createEmailPasswordSession(email, password);
-        return session;
+      const session = await account.createEmailPasswordSession(email, password);
     } catch (er) {
         throw new Error(er as string);
     }
@@ -151,7 +147,7 @@ export const signIn = async ({ email, password }: SignInParams) => {
 
 // Abrufen von Informationen über den aktuellen Benutzer
 // Abrufen der Daten des aktuellen Kontos, Suche nach dem Benutzereintrag in der Datenbank anhand der Konto-ID
-export const getCurrnetUser = async () => {
+export const getCurrentUser = async () => {
 try{
     const currentAccount = await account.get()
     if(!currentAccount) throw Error;

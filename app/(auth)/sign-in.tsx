@@ -3,6 +3,7 @@ import CustomInput from "@/components/CustomInput";
 import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
 import { signIn } from "@/services/appwrite";
+import * as Sentry from "@sentry/react-native";
 import { Link, router } from "expo-router";
 import { useState } from "react";
 import { Alert, Image, Text, View } from "react-native";
@@ -33,6 +34,7 @@ await signIn({ email:form.email,
       router.replace('/profile');
     } catch(error: any){
       Alert.alert('Error', error.message);
+      Sentry.captureEvent(error);
     } finally{
       setIsSubmitting(false);
     }
@@ -83,3 +85,5 @@ await signIn({ email:form.email,
 };
 
 export default SignIn;
+
+//Am

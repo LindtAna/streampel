@@ -6,11 +6,14 @@ import { images } from "@/constants/images";
 import { fetchMovies } from "@/services/api";
 import { getTrendingMovies } from "@/services/appwrite";
 import useFetch from "@/services/useFetch";
+import useAuthStore from "@/store/auth.store";
 import { useRouter } from "expo-router";
 import { ActivityIndicator, FlatList, Image, ScrollView, Text, View } from "react-native";
 
-
 export default function Index() {
+  
+const { user } = useAuthStore();
+
   const router = useRouter();
 
   // Verwenden des useFetch-Hooks zum Laden der Trendfilme aus Appwrite-Datenbank

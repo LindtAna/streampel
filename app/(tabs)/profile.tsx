@@ -1,11 +1,13 @@
 import CustomButton from "@/components/CustomButton";
 import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
+import * as Sentry from '@sentry/react-native';
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { Image, Text, View } from "react-native";
 import { Account, Client } from "react-native-appwrite";
 import { SafeAreaView } from "react-native-safe-area-context";
+
 
 const client = new Client()
   .setEndpoint("https://cloud.appwrite.io/v1") // Replace with your Appwrite endpoint
@@ -71,7 +73,10 @@ const Profile = () => {
               Um Filme zu speichern und auf dein Profil zuzugreifen, melde dich bitte an oder erstelle ein Konto.
             </Text>
             <CustomButton title="Einloggen" onPress={() => router.push("/sign-in")} />
+    
           </>
+
+
         )}
       </View>
     </SafeAreaView>
