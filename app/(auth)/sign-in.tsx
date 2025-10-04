@@ -3,7 +3,7 @@ import CustomInput from "@/components/CustomInput";
 import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
 import { signIn } from "@/services/appwrite";
-import useAuthStore from "@/store/auth.store"; // Добавили импорт хранилища
+import useAuthStore from "@/store/auth.store"; 
 import * as Sentry from "@sentry/react-native";
 import { Link, router } from "expo-router";
 import { useState } from "react";

@@ -52,7 +52,7 @@ const useAuthStore = create<AuthState>((set) => ({
             set({ isAuthenticated: !!user, user: user as unknown as User });
       
         } catch (err) {
-            console.log('fetchAuthenticatedUser:erorr', err)
+            console.log('fetchAuthenticatedUser: No session or error:', err);
             set({ isAuthenticated: false, user: null })
         } finally {
             set({ isLoading: false });

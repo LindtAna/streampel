@@ -148,7 +148,16 @@ export const signIn = async ({ email, password }: SignInParams) => {
 // Abrufen von Informationen über den aktuellen Benutzer
 // Abrufen der Daten des aktuellen Kontos, Suche nach dem Benutzereintrag in der Datenbank anhand der Konto-ID
 export const getCurrentUser = async () => {
-try{
+try {
+    // checken, ob es eine aktive Sitzung gibt
+    try {
+      await account.getSession('current');
+    } catch (e) {
+      //// Wenn keine Sitzung -> null (Gast)
+      return null;
+    }
+
+// try{
     const currentAccount = await account.get()
     if (!currentAccount) return null;
     // if(!currentAccount) throw Error;
@@ -161,7 +170,7 @@ try{
     // if(!currentUser) throw Error;
     return currentUser.documents[0];    
     } catch (err: any) {
-    console.error('getCurrentUser error:', err.message);
+    console.log('getCurrentUser: No session or error:', err.message);
     return null; 
     }
 };
