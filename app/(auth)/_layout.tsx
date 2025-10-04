@@ -1,12 +1,11 @@
-import useAuthStore from "@/store/auth.store";
-import { Redirect, Slot } from "expo-router";
+import { Slot } from "expo-router";
 import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function AuthLayout() {
-  const {isAuthenticated} = useAuthStore();
+  // const {isAuthenticated} = useAuthStore();
 
-  if(isAuthenticated) return <Redirect href="/" />
+  // if(isAuthenticated) return <Redirect href="/" />
   return (
     <SafeAreaView className="bg-primary flex-1">
       <KeyboardAvoidingView

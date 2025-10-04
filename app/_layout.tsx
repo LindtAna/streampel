@@ -1,9 +1,9 @@
 import useAuthStore from "@/store/auth.store";
 import * as Sentry from '@sentry/react-native';
 import { Stack } from "expo-router";
+import { useEffect } from "react";
 import { StatusBar } from "react-native";
 import './globals.css';
-import { useEffect } from "react";
 
 Sentry.init({
   dsn: 'https://4a235e9f4bb9e9d329e80a40a85d5210@o4510126895333376.ingest.de.sentry.io/4510126986100816',
@@ -17,8 +17,6 @@ Sentry.init({
   replaysOnErrorSampleRate: 1,
   integrations: [Sentry.mobileReplayIntegration(), Sentry.feedbackIntegration()],
 
-  // uncomment the line below to enable Spotlight (https://spotlightjs.com)
-  // spotlight: __DEV__,
 });
 
 export default Sentry.wrap(function RootLayout() {

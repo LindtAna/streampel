@@ -150,26 +150,37 @@ export const signIn = async ({ email, password }: SignInParams) => {
 export const getCurrentUser = async () => {
 try{
     const currentAccount = await account.get()
-    if(!currentAccount) throw Error;
+    if (!currentAccount) return null;
+    // if(!currentAccount) throw Error;
     const currentUser = await database.listDocuments(
         DATABASE_USERS_ID,
         COLLECTION_USERS_ID,
         [Query.equal("accountId", currentAccount.$id)]
     )
-    if(!currentUser) throw Error;
-
-    return currentUser.documents[0];
-    
-}catch (er) {
-        throw new Error(er as string);
+    if (!currentUser.documents.length) return null;
+    // if(!currentUser) throw Error;
+    return currentUser.documents[0];    
+    } catch (err: any) {
+    console.error('getCurrentUser error:', err.message);
+    return null; 
     }
-}
+};
+// }catch (er) throw new Error(er as string;}
 
 
 
+// Abmeldung eines bestehenden Benutzers
+export const logout = async () => {
+  try {
+    await account.deleteSession('current');
+  } catch (er) {
+    console.error('Logout failed:', er);
+    throw new Error(er as string);
+  }
+};
 
-// if a document is found increment the searchCound field
-// if no document is found -> create a new document in Appwrite database -> 1
+
+
 
 
 // Appwrite - Open-Source-Plattform BaaS

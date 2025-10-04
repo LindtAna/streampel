@@ -1,7 +1,7 @@
 import { getCurrentUser } from '@/services/appwrite';
 import { create } from 'zustand';
 
-
+// Beschreibung der Struktur des Benutzerobjekts
 interface User {
     accountId?: string;
     name: string;
@@ -9,6 +9,7 @@ interface User {
     avatar?: string;
 }
 
+// Beschreibung des Authentifizierungsstatus im Zustand-Speicher
 type AuthState = {
     isAuthenticated: boolean;
     user: User | null;
@@ -22,6 +23,11 @@ type AuthState = {
 
 }
 
+// Erstellung des Zustand-Speichers zur Verwaltung des Authentifizierungsstatus
+// Initialer Zustand
+// Funktion zum Ändern des Authentifizierungsstatus
+// Funktion zum Setzen der Benutzerdaten
+// Funktion zum Ändern des Ladezustandsи
 const useAuthStore = create<AuthState>((set) => ({
     isAuthenticated: false,
     user: null,
@@ -33,15 +39,18 @@ const useAuthStore = create<AuthState>((set) => ({
 
     setLoading: (value) => set({ isLoading: value }),
 
+
+// Abrufen der Daten des aktuellen Benutzers über getCurrentUser von Appwrite
+// !!user konvertiert user in einen Boolean: true, wenn user nicht null ist, false wenn null
+// // Im Fehlerfall werden der Authentifizierungsstatus und die Benutzerdaten zurückgesetzt
     fetchAuthenticatedUser: async () => {
         set({ isLoading: true });
 
         try {
             const user = await getCurrentUser();
 
-            if (user) set({ isAuthenticated: true, user: user as unknown as User });
-            else set( { isAuthenticated: false, user: null } );
-
+            set({ isAuthenticated: !!user, user: user as unknown as User });
+      
         } catch (err) {
             console.log('fetchAuthenticatedUser:erorr', err)
             set({ isAuthenticated: false, user: null })
