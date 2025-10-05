@@ -10,6 +10,9 @@ const COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
 const DATABASE_USERS_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_USER_ID!;
 const COLLECTION_USERS_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_USER_ID!;
 
+
+const SAVED_COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_SAVED_COLLECTION_ID!;
+
 // Erstellung einer Instanz des Appwrite-Clients zur Interaktion mit dem Server
 // Festlegen der URL des Appwrite-Servers
 // Festlegen der Projekt-ID aus .env
@@ -189,6 +192,75 @@ export const logout = async () => {
 };
 
 
+/// SPEICHERN VON MOVIES FÜR USER/////
+
+export const saveMovie = async (userAccountId: string, movie: Movie | MovieDetails) => {
+  try {
+    const payload = {
+      userId: userAccountId, 
+      movieId: movie.id,
+      title: movie.title,
+      posterPath: movie.poster_path ?? "",
+      vote_average: Number(movie.vote_average ?? 0),
+      release_date: movie.release_date ?? "",
+    };
+
+    console.log("createDocument payload:", payload);
+  return await database.createDocument(
+      DATABASE_ID,
+      SAVED_COLLECTION_ID,
+      ID.unique(),
+      payload
+    );
+  } catch (error) {
+    console.error("Error saving movie:", error);
+    throw error;
+  }
+};
+
+
+export const removeMovie = async (userAccountId: string, movieId: number) => {
+  try {
+    const res = await database.listDocuments(DATABASE_ID, SAVED_COLLECTION_ID, [
+      Query.equal("userId", userAccountId),
+      Query.equal("movieId", movieId),
+    ]);
+    if (res.total > 0) {
+      await database.deleteDocument(DATABASE_ID, SAVED_COLLECTION_ID, res.documents[0].$id);
+    }
+  } catch (error) {
+    console.error("Error removing movie:", error);
+    throw error;
+  }
+};
+
+
+export const isMovieSaved = async (userAccountId: string, movieId: number) => {
+  try {
+    const res = await database.listDocuments(DATABASE_ID, SAVED_COLLECTION_ID, [
+      Query.equal("userId", userAccountId),
+      Query.equal("movieId", movieId),
+    ]);
+    return res.total > 0;
+  } catch (error) {
+    console.error("Error checking saved movie:", error);
+    return false;
+  }
+};
+
+
+
+export const listSavedMovies = async (userAccountId: string) => {
+  try {
+    const res = await database.listDocuments(DATABASE_ID, SAVED_COLLECTION_ID, [
+      Query.equal("userId", userAccountId),
+    ]);
+    return res.documents;
+  } catch (error) {
+    console.error("Error listing saved movies:", error);
+    return [];
+  }
+};
 
 
 

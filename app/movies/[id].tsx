@@ -1,8 +1,10 @@
 import { icons } from "@/constants/icons";
 import { fetchMovieDetails } from "@/services/api";
+import { isMovieSaved, removeMovie, saveMovie } from "@/services/appwrite";
 import useFetch from "@/services/useFetch";
+import useAuthStore from "@/store/auth.store";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 // Interface für die Props des MovieInfo-Komponents
@@ -23,9 +25,39 @@ const MovieInfo = ({ label, value }: MovieInfoProps) => (
 
 
 const MovieDetails = () => {
-    const router = useRouter();
-    const { id } = useLocalSearchParams(); // Extrahiert die Film-ID aus der URL-Parameter
-    const { data: movie, loading } = useFetch(() => fetchMovieDetails(id as string)); // Verwenden des useFetch-Hooks zum Laden der Filmdetails basierend auf der ID
+const router = useRouter();
+const { id } = useLocalSearchParams();
+const { data: movie, loading } = useFetch(() => fetchMovieDetails(id as string)); 
+const { user } = useAuthStore();
+const [isSaved, setIsSaved] = useState(false);
+const [isToggling, setIsToggling] = useState(false);
+
+////// TODO -> Fixen Farbproblem der Speicher-Icon 
+useEffect(() => {
+    if (user && movie) {
+      isMovieSaved(user.accountId!, movie.id).then(setIsSaved);
+    }
+  }, [user, movie]);
+
+
+  const handleSaveToggle = async () => {
+    if (!user || !movie || isToggling) return; // Prevent if not logged in, no movie, or toggling
+    setIsToggling(true);
+    try {
+      if (isSaved) {
+        await removeMovie(user.accountId!, movie.id);
+      } else {
+        await saveMovie(user.accountId!, movie);
+      }
+      // Re-check saved status from DB to ensure sync
+      const savedStatus = await isMovieSaved(user.accountId!, movie.id);
+      setIsSaved(savedStatus);
+    } catch (error) {
+      console.error("Error toggling save:", error);
+    } finally {
+      setIsToggling(false);
+    }
+  };
 
     return (
         <View className="bg-primary flex-1">
@@ -41,20 +73,36 @@ const MovieDetails = () => {
                 </View>
 
                 {/* Container für Filmdetails */}
-                <View className="flex-col items-start justify-center mt-5 px-5">
-                    <Text className="text-white font-bold text-2xl">{movie?.title}</Text>
-
+                <View className="mt-5 px-5">
+                    <View className="flex-row items-center justify-between w-full">
+                        <Text className="text-white font-bold text-2xl flex-1 mr-2" numberOfLines={2} ellipsizeMode="tail">
+                            {movie?.title}
+                        </Text>
+                       {user && (
+              <TouchableOpacity onPress={handleSaveToggle} disabled={isToggling}>
+                <Image
+                  source={icons.saveMovie}
+                  className="size-8"
+                  tintColor={isSaved ? "#f7ff9c" : "#faffff"}
+                />
+              </TouchableOpacity>
+            )}
+                    </View>
                     {/* Container für Erscheinungsjahr und Laufzeit */}
                     <View className="flex-row items-center gap-x-1 mt-2">
                         <Text className="text-white text-sm">{movie?.release_date?.split('-')[0]}  • </Text>
                         <Text className="text-white text-sm">{movie?.runtime}Min</Text>
                     </View>
-{/* Container für Bewertung mit Stern-Icon */}
-                    <View className="flex-row items-center bg-dark-100 px-1 py-1 rounded-md gap-x-1 mt-2 mb-2">
-                        <Image source={icons.star} className="size-4" />
-                        <Text className="text-white font-bold text-sm">{Math.round(movie?.vote_average ?? 0)}/10  </Text>
-                        <Text className="text-white text-sm">({movie?.vote_count} Stimmen)</Text>
+                    {/* Container für Bewertung mit Stern-Icon */}
+
+                    <View className="flex-row items-center mt-2 mb-2">
+                        <View className="flex-row items-center bg-dark-100 px-2 py-1 rounded-md gap-x-1">
+                            <Image source={icons.star} className="size-4" />
+                            <Text className="text-white font-bold text-sm">{Math.round(movie?.vote_average ?? 0)}/10</Text>
+                            <Text className="text-white text-sm">({movie?.vote_count} Stimmen)</Text>
+                        </View>
                     </View>
+
                     {/* Genres, als Liste mit "•" getrennt */}
                     <MovieInfo value={movie?.genres?.map((g) => g.name).join(' • ') || 'N/A'} />
                     <MovieInfo label="Übersicht" value={movie?.overview} />
@@ -70,7 +118,9 @@ const MovieDetails = () => {
                         />
                     </View>
                     {/* Produktionsfirmen, als Liste mit "•" getrennt */}
-                    <MovieInfo label="Produktionsfirmen" value={movie?.production_companies.map((c) => c.name).join(' • ') || 'N/A'} />
+                    <View className="mb-10">
+                        <MovieInfo label="Produktionsfirmen" value={movie?.production_companies.map((c) => c.name).join(' • ') || 'N/A'} />
+                    </View>
                 </View>
             </ScrollView>
             {/* Klickbare Schaltfläche für die Rückkehr zur vorherigen Seite */}

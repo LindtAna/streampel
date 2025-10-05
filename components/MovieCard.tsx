@@ -24,7 +24,7 @@ const MovieCard = ({ id, poster_path, title, vote_average, release_date }: Movie
                 />
                 {/* Zeigt den Filmtitel an
                 numberOfLines schneidet lange Titel auf eine Zeile */}
-                <Text className="text-sm font-bold text-white mt-2" numberOfLines={1}>{title}</Text>
+                <Text className="text-sm font-bold text-white mt-2" numberOfLines={1}>{title}</Text> 
                 {/* View für die Bewertung (Stern-Symbol + Bewertungszahl) */}
                 <View className="flex-row items-center justify-start gap-x-1" >
                     <Image source={icons.star} className="size-4" />
@@ -35,7 +35,6 @@ const MovieCard = ({ id, poster_path, title, vote_average, release_date }: Movie
                 <View className="flex-row items-center justify-between">
                     {/* release_date wird an '-' (2025-01-21) geteilt und das erste Element (Jahr) wird verwendet */}
                     <Text className="text-xs text-light-300 font-medium mt-1">{release_date?.split('-')[0]}</Text>
-                    {/* <Text className="text-ss font-medium text-light-300 uppercase">Movie</Text> */}
                 </View>
             </TouchableOpacity>
         </Link>
