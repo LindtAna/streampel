@@ -7,13 +7,13 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
-// Interface für die Props des MovieInfo-Komponents
+// Definition des Schnittstellen-Typs MovieInfoProps für die Props des MovieInfo-Komponents
 interface MovieInfoProps {
     label?: string,
     value?: string | number | null,
 }
 
-// Anzeige von Film-Informationen
+// Komponente zur Anzeige von Informationen über den Film
 const MovieInfo = ({ label, value }: MovieInfoProps) => (
     <View className={`flex-col items-start justify-center ${label ? 'mt-5' : ''}`}>
         {label && <Text className="text-light-300 font-normal text-sm">{label}</Text>}
@@ -23,7 +23,12 @@ const MovieInfo = ({ label, value }: MovieInfoProps) => (
     </View>
 )
 
-
+// Detaillierte Informationen über den Film
+// Abrufen der Navigationsfunktion (router.back für die Rückkehr zum vorherigen Bildschirm)
+// Abrufen der Film-ID aus der URL
+// useFetch zum Laden der Filmdaten mit fetchMovieDetails
+// Lokaler Zustand isSaved — Boolean-Flag, das angibt, ob der Film gespeichert ist
+// Lokaler Zustand isToggling — Flag, das Mehrfachklicks während asynchroner Operationen verhindert
 const MovieDetails = () => {
 const router = useRouter();
 const { id } = useLocalSearchParams();
@@ -32,16 +37,23 @@ const { user } = useAuthStore();
 const [isSaved, setIsSaved] = useState(false);
 const [isToggling, setIsToggling] = useState(false);
 
-////// TODO -> Fixen Farbproblem der Speicher-Icon 
+// Überprüfung, ob der Film gespeichert ist
+// Überprüfung, dass es ein Benutzer und Filmdaten gibt
+// Asynchroner Aufruf von isMovieSaved mit der Benutzer-ID und der Film-ID
+// Ergebnis (true/false) wird an setIsSaved übergeben
 useEffect(() => {
     if (user && movie) {
       isMovieSaved(user.accountId!, movie.id).then(setIsSaved);
     }
   }, [user, movie]);
 
-
+// Asynchrone Funktion zum Umschalten des Speicherstatus des Films (gespeichert oder nicht)
+// Wenn kein Benutzer, kein Film oder isToggling bereits läuft -> nichts tun
+// isToggling -> true, um wiederholte Klicks zu verhindern
+// Wenn der Film bereits gespeichert ist, wird removeMovie aufgerufen, um ihn zu löschen
+// Wenn der Film nicht gespeichert ist, wird saveMovie aufgerufen, um ihn in die Datenbank zu speichern
   const handleSaveToggle = async () => {
-    if (!user || !movie || isToggling) return; // Prevent if not logged in, no movie, or toggling
+    if (!user || !movie || isToggling) return; 
     setIsToggling(true);
     try {
       if (isSaved) {
@@ -49,7 +61,10 @@ useEffect(() => {
       } else {
         await saveMovie(user.accountId!, movie);
       }
-      // Re-check saved status from DB to ensure sync
+  
+
+// Erneute Überprüfung des Speicherstatus in der Datenbank, um den Zustand isSaved zu synchronisieren
+// Aktualisierung des Zustands isSaved basierend auf dem Ergebnis aus der Datenbank   
       const savedStatus = await isMovieSaved(user.accountId!, movie.id);
       setIsSaved(savedStatus);
     } catch (error) {
@@ -59,25 +74,29 @@ useEffect(() => {
     }
   };
 
+
+ // Rendern des Bildschirms mit den Filmdetails, die Daten stammen von der TMDB API
     return (
         <View className="bg-primary flex-1">
             <ScrollView contentContainerStyle={{
                 paddingBottom: 80
             }}>
-
                 {/* Container für das Filmplakat */}
-                <View>
+                <View> 
                     <Image source={{ uri: `https://image.tmdb.org/t/p/w500${movie?.poster_path}` }}
                         className="w-full h-[550px]"
                         resizeMode="contain" />
                 </View>
 
-                {/* Container für Filmdetails */}
+                {/* Container für Filmdetails + Speicher-Icon */}
                 <View className="mt-5 px-5">
                     <View className="flex-row items-center justify-between w-full">
                         <Text className="text-white font-bold text-2xl flex-1 mr-2" numberOfLines={2} ellipsizeMode="tail">
                             {movie?.title}
                         </Text>
+                        {/* Bedingung: Wenn der Benutzer authentifiziert ist, wird das Speicher-Icon angezeigt.
+                        // TouchableOpacity für ein klickbares Icon, deaktiviert bei isToggling=true 
+                        // Gelb (#f7ff9c) für gespeichert, Weiß (#faffff) für nicht gespeichert */}
                        {user && (
               <TouchableOpacity onPress={handleSaveToggle} disabled={isToggling}>
                 <Image
@@ -94,7 +113,6 @@ useEffect(() => {
                         <Text className="text-white text-sm">{movie?.runtime}Min</Text>
                     </View>
                     {/* Container für Bewertung mit Stern-Icon */}
-
                     <View className="flex-row items-center mt-2 mb-2">
                         <View className="flex-row items-center bg-dark-100 px-2 py-1 rounded-md gap-x-1">
                             <Image source={icons.star} className="size-4" />
@@ -123,7 +141,7 @@ useEffect(() => {
                     </View>
                 </View>
             </ScrollView>
-            {/* Klickbare Schaltfläche für die Rückkehr zur vorherigen Seite */}
+            {/* Klickbare Schaltfläche mit Pfeil-Icon für die Rückkehr zur vorherigen Seite */}
             <TouchableOpacity
                 className="absolute bottom-14 left-0 right-0 mx-5 bg-dark-200 rounded-full
                  py-3.5 flex flex-row items-center justify-center z-50"

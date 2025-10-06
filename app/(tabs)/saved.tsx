@@ -10,16 +10,29 @@ import { useCallback, useState } from "react";
 import { FlatList, Image, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-////TODO -> Fixen die Anzeige der Filmeliste !
+// Definition des funktionalen Komponents Saved — Bildschirm zur Anzeige der gespeicherten Filme des Benutzers
+// Wenn der Benutzer nicht authentifiziert ist, wird ein Bildschirm für Gäste mit einer Einladung zur Anmeldung angezeigt
 const Saved = () => {
 
-const [movies, setMovies] = useState<any[]>([]);
-const [loading, setLoading] = useState(false);
+  // Array der gespeicherten Filme, initialisiert mit einem leeren Array
+  // Wird verwendet, um die Liste der Filme in der FlatList zu speichern und anzuzeigen
+  const [movies, setMovies] = useState<any[]>([]);
 
-  // Daten aus auth.store extrahieren -> Benutzer, Ladezustand und Authentifizierung
+  // Lokaler Zustand loading — Flag für das Laden von Daten, initialisiert mit false
+  // Wird verwendet, um einen Ladeindikator während der Datenbankabfrage anzuzeigen
+  const [loading, setLoading] = useState(false);
+
+  // Extrahieren von Daten aus dem Zustand-Authentifizierungs-Store
+  // isAuthenticated — Boolean-Flag, das angibt, ob der Benutzer authentifiziert ist
   const { user, isLoading: authLoading, isAuthenticated } = useAuthStore();
 
- useFocusEffect(
+  // Hook useFocusEffect — führt Code jedes Mal aus, wenn der Bildschirm fokussiert wird, sorgt für automatische Aktualisierung der Liste gespeicherter Filme
+  // useCallback speichert die Funktion im Speicher und gibt dieselbe Version der Funktion zurück; die Funktion wird neu gestartet, wenn sich user oder isAuthenticated ändern
+  // user && isAuthenticated -> Überprüfung, dass ein Benutzer existiert und authentifiziert ist — nur dann werden die Daten geladen
+  // listSavedMovies mit der ID des Benutzerkontos -> Abrufen der Liste aus der Datenbank
+  // .then — bei Erfolg wird der Zustand movies mit dem Array der gespeicherten Filme aktualisiert
+  // .finally — setzt den Lade-Flag immer auf false, nachdem die Abfrage abgeschlossen ist
+  useFocusEffect(
     useCallback(() => {
       if (user && isAuthenticated) {
         setLoading(true);
@@ -30,6 +43,8 @@ const [loading, setLoading] = useState(false);
     }, [user, isAuthenticated])
   );
 
+  // Bedingung: Wenn die Authentifizierung (authLoading) oder das Laden der Daten (loading) läuft,
+  // wird ein einfacher Bildschirm mit dem Text "Loading..." zur Anzeige des Prozesses angezeigt
   if (authLoading || loading) {
     return (
       <SafeAreaView className="flex-1 justify-center items-center bg-dark-200">
@@ -38,8 +53,9 @@ const [loading, setLoading] = useState(false);
     );
   }
 
-
+  // Rendern des Bildschirms abhängig vom Authentifizierungsstatus
   return (
+
     // Hauptcontainer
     <SafeAreaView className="bg-primary flex-1">
       {/* hintergrund */}
@@ -51,22 +67,26 @@ const [loading, setLoading] = useState(false);
       </View>
 
       {/* content */}
-      <View className="flex justify-center items-center flex-1 flex-col gap-5 px-10">
+      <View className="flex justify-center items-center flex-1 flex-col gap-5 px-2">
+        {/* Bedingtes Rendern: Wenn der Benutzer authentifiziert ist -> Anzeige der Liste gespeicherter Filme;
+            sonst — Bildschirm für Gäste */}
         {user && isAuthenticated ? (
-
-
-
-          // Wenn der Benutzer authentifiziert ist, zeigen wir gespeicherte Filme
           <>
-                {movies.length === 0 ? (
-                  <>
-                    <Image source={icons.saveMovie} className="size-10" tintColor="#fff" />
-                    <Text className="text-gray-500 text-base text-center">
-                      Du hast noch keine filme gespeichert.
-                    </Text>
-                  </>
-                ) : (
-                  <FlatList
+            {/* Verschachtelte Bedingung: Wenn keine gespeicherten Filme vorhanden sind, wird eine Nachricht "keine Filme" angezeigt */}
+            {movies.length === 0 ? (
+              <>
+                <Image source={icons.saveMovie} className="size-10" tintColor="#fff" />
+                <Text className="text-gray-500 text-base text-center">
+                  Du hast noch keine Filme gespeichert.
+                </Text>
+              </>
+            ) : (
+              // Wenn Filme vorhanden sind: FlatList zur Anzeige der Liste in 3 Spalten
+              // data — Array movies für das Rendern
+              // renderItem — Funktion zum Rendern jeder Filmkarte: Übergibt Daten an MovieCard
+              // keyExtractor — eindeutiger Schlüssel für jedes Element (ID des Dokuments aus Appwrite)
+              // contentContainerStyle: Stil des Listencontainers
+              <FlatList
                 data={movies}
                 renderItem={({ item }) => (
                   <MovieCard
@@ -90,7 +110,7 @@ const [loading, setLoading] = useState(false);
                 numColumns={3}
                 columnWrapperStyle={{
                   justifyContent: "flex-start",
-                  gap: 20,
+                  gap: 15,
                   padding: 5,
                   marginBottom: 10,
                 }}
@@ -100,13 +120,18 @@ const [loading, setLoading] = useState(false);
           </>
         ) : (
           <>
+            {/* Wenn nicht authentifiziert -> Gast -> Einladung zur Registrierung oder Anmeldung, um Filme zu speichern */}
             <Image source={icons.saveMovie} className="size-10" tintColor="#fff" />
             <Text className="text-gray-500 text-base">Saved</Text>
             <Text className="text-gray-500 text-base text-center">
               Um Filme zu speichern, melde dich bitte an oder erstelle ein Konto.
             </Text>
+
             {/* Weiterleitung zur Anmeldeseite */}
-            <CustomButton title="Einloggen" onPress={() => router.push("/sign-in")} />
+            <View className="w-full px-10">
+              <CustomButton
+                title="Einloggen" onPress={() => router.push("/sign-in")} />
+            </View>
           </>
         )}
       </View>

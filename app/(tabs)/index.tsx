@@ -93,8 +93,8 @@ const { user } = useAuthStore();
               columnWrapperStyle={
                 {
                   justifyContent: 'flex-start',
-                  gap: 20,
-                  paddingRight: 5,
+                  gap: 15,
+                  padding: 5,
                   marginBottom: 10
                 }}
               className="mt-2 pb-32"

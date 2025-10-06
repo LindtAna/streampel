@@ -10,7 +10,7 @@ const COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
 const DATABASE_USERS_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_USER_ID!;
 const COLLECTION_USERS_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_USER_ID!;
 
-
+// ID der Tabelle für Filme, die von registrierten Benutzern in saved gespeichert wurden
 const SAVED_COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_SAVED_COLLECTION_ID!;
 
 // Erstellung einer Instanz des Appwrite-Clients zur Interaktion mit dem Server
@@ -194,8 +194,14 @@ export const logout = async () => {
 
 /// SPEICHERN VON MOVIES FÜR USER/////
 
+// Die Funktion saveMovie speichert einen Film in der Datenbanktabelle für einen bestimmten Benutzer
+// Nimmt userAccountId (ID des Benutzerkontos) und das movie-Objekt (Filmdaten aus der TMDB API) entgegen
 export const saveMovie = async (userAccountId: string, movie: Movie | MovieDetails) => {
   try {
+   // Objekt mit den Daten, die in der Datenbank gespeichert werden sollen:
+    // userId — ID des Benutzers, der den Film speichert
+    // movieId — ID des Films aus der TMDB API
+    // title, posterPath -> weitere Details in MovieCard.tsx
     const payload = {
       userId: userAccountId, 
       movieId: movie.id,
@@ -205,8 +211,13 @@ export const saveMovie = async (userAccountId: string, movie: Movie | MovieDetai
       release_date: movie.release_date ?? "",
     };
 
+    
     console.log("createDocument payload:", payload);
-  return await database.createDocument(
+
+    // Erstellung eines neuen Dokuments in der Tabelle SAVED_COLLECTION_ID
+    // ID.unique() generiert eine eindeutige ID für das Dokument
+    // payload enthält die Daten, die als neues Dokument gespeichert werden
+    return await database.createDocument(
       DATABASE_ID,
       SAVED_COLLECTION_ID,
       ID.unique(),
@@ -214,17 +225,25 @@ export const saveMovie = async (userAccountId: string, movie: Movie | MovieDetai
     );
   } catch (error) {
     console.error("Error saving movie:", error);
+
     throw error;
   }
 };
 
 
+// Entfernt einen Film aus der Liste der gespeicherten Filme eines bestimmten Benutzers
+// Nimmt userAccountId (ID des Benutzerkontos) und movieId (ID des Films aus der TMDB API) entgegen
 export const removeMovie = async (userAccountId: string, movieId: number) => {
   try {
+   // Suche nach einem Dokument in der Sammlung SAVED_COLLECTION_ID, das den angegebenen userId und movieId entspricht
+    // Query.equal für die Filterung nach diesen beiden Feldern
     const res = await database.listDocuments(DATABASE_ID, SAVED_COLLECTION_ID, [
       Query.equal("userId", userAccountId),
       Query.equal("movieId", movieId),
     ]);
+
+    // Prüfung, ob mindestens ein Dokument gefunden wurde (res.total > 0)
+    // Löschung des gefundenen Dokuments aus der Sammlung anhand seiner eindeutigen ID ($id)
     if (res.total > 0) {
       await database.deleteDocument(DATABASE_ID, SAVED_COLLECTION_ID, res.documents[0].$id);
     }
@@ -235,29 +254,43 @@ export const removeMovie = async (userAccountId: string, movieId: number) => {
 };
 
 
+// Überprüft, ob ein Film für einen bestimmten Benutzer gespeichert ist
 export const isMovieSaved = async (userAccountId: string, movieId: number) => {
   try {
+    // Suche nach Dokumenten in der Sammlung SAVED_COLLECTION_ID, die den angegebenen userId und movieId entsprechen
     const res = await database.listDocuments(DATABASE_ID, SAVED_COLLECTION_ID, [
       Query.equal("userId", userAccountId),
       Query.equal("movieId", movieId),
     ]);
+
+   // Gibt true zurück, wenn mindestens ein Dokument gefunden wurde (res.total > 0), sonst false
     return res.total > 0;
   } catch (error) {
+    
     console.error("Error checking saved movie:", error);
+    // Im Fehlerfall wird false zurückgegeben, um die Ausführung der Anwendung nicht zu unterbrechen
     return false;
   }
 };
 
 
 
+// Ruft die Liste aller gespeicherten Filme für einen bestimmten Benutzer ab
+// Nimmt userAccountId (ID des Benutzerkontos) entgegen
 export const listSavedMovies = async (userAccountId: string) => {
   try {
+    // Suche nach allen Dokumenten in der Sammlung SAVED_COLLECTION_ID, bei denen userId mit dem übergebenen userAccountId übereinstimmt
+    // Query.equal wird für die Filterung nach userId verwendet
     const res = await database.listDocuments(DATABASE_ID, SAVED_COLLECTION_ID, [
       Query.equal("userId", userAccountId),
     ]);
+
+    /// Gibt ein Array von Dokumenten zurück (Liste der gespeicherten Filme)
     return res.documents;
   } catch (error) {
+    
     console.error("Error listing saved movies:", error);
+    // Im Fehlerfall wird ein leeres Array zurückgegeben, um die Ausführung der Anwendung nicht zu unterbrechen
     return [];
   }
 };
