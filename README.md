@@ -1,3 +1,5 @@
+state: Das Projekt ist als mobile Anwendung bereit für das Deployment
+
 DAS PROJEKT BEFINDET SICH IN ENTWICKLUNG. DIESE DOKUMENTATION IST DERZEIT NUR EINE VORLAGE.
 
 # Streampel
