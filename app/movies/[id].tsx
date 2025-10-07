@@ -1,3 +1,4 @@
+import CustomButton from "@/components/CustomButton";
 import { icons } from "@/constants/icons";
 import { fetchMovieDetails } from "@/services/api";
 import { isMovieSaved, removeMovie, saveMovie } from "@/services/appwrite";
@@ -6,6 +7,7 @@ import useAuthStore from "@/store/auth.store";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+
 
 // Definition des Schnittstellen-Typs MovieInfoProps für die Props des MovieInfo-Komponents
 interface MovieInfoProps {
@@ -79,7 +81,7 @@ useEffect(() => {
     return (
         <View className="bg-primary flex-1">
             <ScrollView contentContainerStyle={{
-                paddingBottom: 80
+                paddingBottom: 60
             }}>
                 {/* Container für das Filmplakat */}
                 <View> 
@@ -96,13 +98,13 @@ useEffect(() => {
                         </Text>
                         {/* Bedingung: Wenn der Benutzer authentifiziert ist, wird das Speicher-Icon angezeigt.
                         // TouchableOpacity für ein klickbares Icon, deaktiviert bei isToggling=true 
-                        // Gelb (#f7ff9c) für gespeichert, Weiß (#faffff) für nicht gespeichert */}
+                        // Gelb (#f6b40a) für gespeichert, Weiß (#faffff) für nicht gespeichert */}
                        {user && (
               <TouchableOpacity onPress={handleSaveToggle} disabled={isToggling}>
                 <Image
                   source={icons.saveMovie}
-                  className="size-8"
-                  tintColor={isSaved ? "#f7ff9c" : "#faffff"}
+                  className="size-4"
+                  tintColor={isSaved ? "#f6b40a" : "#faffff"}
                 />
               </TouchableOpacity>
             )}
@@ -141,19 +143,23 @@ useEffect(() => {
                     </View>
                 </View>
             </ScrollView>
+
             {/* Klickbare Schaltfläche mit Pfeil-Icon für die Rückkehr zur vorherigen Seite */}
-            <TouchableOpacity
-                className="absolute bottom-14 left-0 right-0 mx-5 bg-dark-200 rounded-full
-                 py-3.5 flex flex-row items-center justify-center z-50"
+            <View className="w-full px-10 pb-20">
+              <CustomButton
+                title="Zurück"
                 onPress={router.back}
-            >
-                <Image
-                    source={icons.arrow}
-                    className="size-5 mr-1 mt-0.5 rotate-180"
-                    tintColor="#bddeff"
-                />
-                <Text className="color-light-100 font-semibold text-base">Zurück</Text>
-            </TouchableOpacity>
+                style="bottom-20" 
+                textStyle="mr-2"
+                leftIcon={
+                    <Image
+                        source={icons.arrow}
+                        className="size-2 mr-1 mt-0.5 rotate-180"
+                        tintColor="#bddeff"
+                    />
+                }
+            />
+            </View>
         </View>
     )
 }

@@ -7,7 +7,7 @@ import useAuthStore from "@/store/auth.store";
 import { useFocusEffect } from "@react-navigation/native";
 import { router } from "expo-router";
 import { useCallback, useState } from "react";
-import { FlatList, Image, Text, View } from "react-native";
+import { FlatList, Image, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 // Definition des funktionalen Komponents Saved — Bildschirm zur Anzeige der gespeicherten Filme des Benutzers
@@ -57,19 +57,18 @@ const Saved = () => {
   return (
 
     // Hauptcontainer
-    <SafeAreaView className="bg-primary flex-1">
+    <View className="bg-primary flex-1">
       {/* hintergrund */}
-      <Image source={images.bg} className="absolute w-full" />
+      <Image source={images.bg} className="absolute w-full z-0" />
 
-      {/* ampel-logo */}
-      <View className="flex-row justify-center mt-20 pb-5 items-center">
-        <Image source={icons.logo} className="w-37 h-15" />
-      </View>
+      <ScrollView className="flex-1 px-2"
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ minHeight: '100%', paddingBottom: 10 }}>
 
-      {/* content */}
-      <View className="flex justify-center items-center flex-1 flex-col gap-5 px-2">
+        <Image source={icons.logo} className="w-17 h-10 mt-20 mb-5 mx-auto" />
         {/* Bedingtes Rendern: Wenn der Benutzer authentifiziert ist -> Anzeige der Liste gespeicherter Filme;
             sonst — Bildschirm für Gäste */}
+
         {user && isAuthenticated ? (
           <>
             {/* Verschachtelte Bedingung: Wenn keine gespeicherten Filme vorhanden sind, wird eine Nachricht "keine Filme" angezeigt */}
@@ -109,9 +108,8 @@ const Saved = () => {
                 keyExtractor={(item) => item.$id}
                 numColumns={3}
                 columnWrapperStyle={{
-                  justifyContent: "flex-start",
+                  justifyContent: "center",
                   gap: 15,
-                  padding: 5,
                   marginBottom: 10,
                 }}
                 contentContainerStyle={{ paddingBottom: 100 }}
@@ -121,21 +119,23 @@ const Saved = () => {
         ) : (
           <>
             {/* Wenn nicht authentifiziert -> Gast -> Einladung zur Registrierung oder Anmeldung, um Filme zu speichern */}
-            <Image source={icons.saveMovie} className="size-10" tintColor="#fff" />
-            <Text className="text-gray-500 text-base">Saved</Text>
-            <Text className="text-gray-500 text-base text-center">
+           <View className="flex-1 flex-col justify-center gap-5 mt-20 pb-10 px-5 items-center">
+            <Image source={icons.save} className="size-10" tintColor="#A8B5DB" />
+            <Text className="text-light-200 text-base">Saved</Text>
+            <Text className="text-light-200 text-base text-center">
               Um Filme zu speichern, melde dich bitte an oder erstelle ein Konto.
             </Text>
-
             {/* Weiterleitung zur Anmeldeseite */}
             <View className="w-full px-10">
               <CustomButton
                 title="Einloggen" onPress={() => router.push("/sign-in")} />
             </View>
+            </View>
           </>
         )}
-      </View>
-    </SafeAreaView>
+
+      </ScrollView >
+    </View>
   );
 };
 

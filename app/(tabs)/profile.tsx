@@ -73,7 +73,7 @@ Leitet zur Anmeldeseite weiter */}
             <Image source={icons.guest} className="w-20 h-20"/>
            
             <Text className="text-white text-xl font-bold">♡ willkommen!</Text>
-            <Text className="text-gray-500 text-base text-center">
+            <Text className="text-light-200 text-base text-center">
               Um Filme zu speichern und auf dein Profil zuzugreifen, melde dich bitte an oder erstelle ein Konto.
             </Text>
 

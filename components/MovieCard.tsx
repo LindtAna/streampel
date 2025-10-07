@@ -10,7 +10,7 @@ const MovieCard = ({ id, poster_path, title, vote_average, release_date }: Movie
        //* TouchableOpacity -> klickbare Karte mit einem Schattensseffekt beim Drücken w-[30%] - 30% der Breite des Parent-Containers
         // Wenn es poster_path gibt, wird die TMDb-URL verwendet, sonst placeholder
        <Link href={`/movies/${id}`} asChild>
-            <TouchableOpacity className="w-[30%]">
+            <TouchableOpacity className="flex-1">
                 <Image
                     source={{
                         uri: poster_path

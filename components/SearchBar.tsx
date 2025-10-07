@@ -22,7 +22,7 @@ const SearchBar = ({ placeholder, value, onChangeText, onPress }: Props) => {
                 value={value}
                 onChangeText={onChangeText}
                 placeholderTextColor="#6398ef"
-                className="flex-1 ml2 text-white"
+                className="flex-1 ml-2 text-white py-2"
             />
         </View>
     )

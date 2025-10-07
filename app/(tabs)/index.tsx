@@ -37,7 +37,7 @@ const { user } = useAuthStore();
     <View className="flex-1 bg-primary">
       <Image source={images.bg} className="absolute w-full z-0" />
 
-      <ScrollView className="flex-1 px-5"
+      <ScrollView className="flex-1 px-2"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ minHeight: '100%', paddingBottom: 10 }}>
 
@@ -94,7 +94,6 @@ const { user } = useAuthStore();
                 {
                   justifyContent: 'flex-start',
                   gap: 15,
-                  padding: 5,
                   marginBottom: 10
                 }}
               className="mt-2 pb-32"
