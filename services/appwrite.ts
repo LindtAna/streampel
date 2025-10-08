@@ -18,9 +18,9 @@ const SAVED_COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_SAVED_COLLECTION_ID
 // Festlegen der Projekt-ID aus .env
 // Festlegen der Plattform der App
 const client = new Client()
-    .setEndpoint('https://cloud.appwrite.io/v1')
+    .setEndpoint('https://fra.cloud.appwrite.io/v1')
     .setProject(process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!)
-    .setPlatform('com.lindtana.streampel')
+    .setPlatform('streampel.vercel.app')
 
 // Initialisierung von Objekten für die Arbeit mit Konten, Datenbank und Avataren
 export const account = new Account(client)
