@@ -21,7 +21,7 @@ const client = new Client()
     .setEndpoint('https://fra.cloud.appwrite.io/v1')
     .setProject(process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!)
     .setPlatform('streampel.vercel.app')
-    .setSession('');
+    // .setSession('');
 
 // Initialisierung von Objekten für die Arbeit mit Konten, Datenbank und Avataren
 export const account = new Account(client)
@@ -169,6 +169,7 @@ export const createUser = async ({ email, password, name }: CreateUserParams) =>
 export const signIn = async ({ email, password }: SignInParams) => {
     try {
       const session = await account.createEmailPasswordSession(email, password);
+      localStorage.setItem('appwrite_session', session.$id);
       return session;
     } catch (er) {
         throw new Error(er as string);
@@ -224,8 +225,17 @@ try {
     console.log('getCurrentUser: No session or error:', err.message);
     return null; 
     }
+
 };
 
+const sessionId = localStorage.getItem('appwrite_session');
+if (sessionId) {
+    try {
+        await account.getSession(sessionId);
+    } catch {
+        localStorage.removeItem('appwrite_session');
+    }
+}
 
 
 
