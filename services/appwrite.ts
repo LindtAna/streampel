@@ -20,7 +20,7 @@ const SAVED_COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_SAVED_COLLECTION_ID
 const client = new Client()
     .setEndpoint('https://fra.cloud.appwrite.io/v1')
     .setProject(process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!)
-    .setPlatform('streampel.vercel.app')
+    // .setPlatform('streampel.vercel.app')
 
 // Initialisierung von Objekten für die Arbeit mit Konten, Datenbank und Avataren
 export const account = new Account(client)
