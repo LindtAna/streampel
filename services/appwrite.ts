@@ -20,14 +20,17 @@ const SAVED_COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_SAVED_COLLECTION_ID
 const client = new Client()
     .setEndpoint('https://fra.cloud.appwrite.io/v1')
     .setProject(process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!)
-    .setPlatform('streampel.vercel.app')
+    // .setPlatform('streampel.vercel.app')
+    .setSession('');
 
 // Initialisierung von Objekten für die Arbeit mit Konten, Datenbank und Avataren
 export const account = new Account(client)
 const database = new Databases(client);
 const avatars = new Avatars(client)
 
-
+console.log('DATABASE_USERS_ID:', process.env.EXPO_PUBLIC_APPWRITE_DATABASE_USER_ID);
+console.log('COLLECTION_USERS_ID:', process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_USER_ID);
+console.log('PROJECT_ID:', process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID);
 //////// SPEICHERN DER SUCHANFRAGEN DES BENUTZERS IN EINER DATENBANK /////////
 
 // Suche nach Dokumenten in der Sammlung, die der übergebenen Suchanfrage entsprechen
