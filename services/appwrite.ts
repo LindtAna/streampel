@@ -18,7 +18,7 @@ const SAVED_COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_SAVED_COLLECTION_ID
 // Festlegen der Projekt-ID aus .env
 // Festlegen der Plattform der App
 const client = new Client()
-    .setEndpoint('https://fra.cloud.appwrite.io/v1')
+    .setEndpoint('https://streampel.vercel.app')
     .setProject(process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!)
     // .setPlatform('streampel.vercel.app')
 
