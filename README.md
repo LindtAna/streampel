@@ -15,7 +15,7 @@ Im vorhandenen Project ist jedoch auch die Möglichkeit zur Registrierung und Au
 
 Demo Registrierung und Authentifizierung 
 
-![Demo Registrierung und Authentifizierung ]([https://github.com/LindtAna/streampel/blob/main/demo%20auth.gif](https://github.com/LindtAna/streampel/blob/main/demo%20auth.gif)
+![Demo Registrierung und Authentifizierung ](https://github.com/LindtAna/streampel/blob/main/demo%20auth.gif)
 
 
 Demo Filme speichern
