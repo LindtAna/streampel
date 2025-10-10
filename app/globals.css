@@ -3,3 +3,101 @@
 @tailwind utilities;
 
 
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #000000; 
+}
+
+#root {
+  width: 100%;
+  max-width: 375px; 
+  height: 812px; 
+  border: 2px solid #ccc; 
+  border-radius: 20px; 
+  overflow-y: scroll;
+  overflow-x: auto;
+  box-shadow: 0 0 20px rgba(16, 17, 50, 0.2); 
+  position: relative;
+  background: #000; 
+
+  scrollbar-width: none; 
+  -ms-overflow-style: none;
+}
+
+#root *::-webkit-scrollbar {
+  display: none;
+}
+
+#root * {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+#root::after {
+  content: '';
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 134px;
+  height: 5px;
+  background: #ccc;
+  border-radius: 10px;
+}
+
+
+#root::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 30px;
+  background: #000;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+
+@media (max-width: 375px) {
+  body {
+    background: #000;
+  }
+  #root {
+    max-width: 100%;
+    height: 100vh;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  #root::before, #root::after {
+    display: none; 
+  }
+}
+
+.horizontal-flatlist {
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch;
+  flex-grow: 0;
+  width: 100%;
+  min-width: 0; 
+  touch-action: pan-x;
+}
+
+
+.horizontal-flatlist > div {
+  display: flex;
+  flex-direction: row;
+  width: max-content;
+  min-width: 100%;
+}
+
+.horizontal-flatlist, .horizontal-flatlist * {
+  overflow-y: visible !important;
+}

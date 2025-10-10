@@ -1,5 +1,4 @@
 import MovieCard from "@/components/MovieCard";
-import SearchBar from "@/components/SearchBar";
 import TrendingCard from "@/components/TrendingCard";
 import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
@@ -37,11 +36,12 @@ const { user } = useAuthStore();
     <View className="flex-1 bg-primary">
       <Image source={images.bg} className="absolute w-full z-0" />
 
-      <ScrollView className="flex-1 px-2"
+      <ScrollView className="flex-1 px-4"
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ minHeight: '100%', paddingBottom: 10 }}>
+        contentContainerStyle={{ minHeight: '100%', paddingBottom: 10 }}
+        nestedScrollEnabled={true}>
 
-        <Image source={icons.logo} className="w-17 h-10 mt-20 mb-5 mx-auto" />
+        <Image source={icons.logo} className="w-17 h-10 mt-20 mx-auto" />
 
         {moviesLoading || trendingLoading ? (
           <ActivityIndicator
@@ -53,10 +53,10 @@ const { user } = useAuthStore();
         ) : moviesError || trendingError ? ( 
           <Text>Error:{moviesError?.message || trendingError?.message} </Text>
         ) : <View className="flex-1 mt-5">
-          <SearchBar
+          {/* <SearchBar
             onPress={() => router.push("/search")}
             placeholder="Suche"
-          />
+          /> */}
 
            {/* Container für die Überschrift der Trendfilme */}
           {trendingMovies && (
@@ -66,18 +66,18 @@ const { user } = useAuthStore();
           )}
 
           <>
-
-
-            <FlatList className="mb-4 mt-3"
+            <FlatList className="mb-4 mt-3 horizontal-flatlist"
               horizontal
               showsHorizontalScrollIndicator={false}
+              scrollEnabled={true}
               ItemSeparatorComponent={() => <View className="w-4" />}
               data={trendingMovies}
               renderItem={({ item, index }) => (
-                <TrendingCard movie={item} index={index} />
+                 <TrendingCard movie={item} index={index} />
               )}
               keyExtractor={(item) => item.movie_id.toString()}
-
+              contentContainerStyle={{ paddingHorizontal: 4, minWidth: "100%" }}
+            style={{ flexGrow: 0, overflowX: "auto", width: "100%", minWidth: 0 }}
             />
             <Text className="text-lg text-light-200 font-bold mt-5 mb-3"
             >Neuerscheinungen</Text>
@@ -88,7 +88,7 @@ const { user } = useAuthStore();
                   {...item}
                 />
               )}
-              keyExtractor={(item, index) => (item.id ? item.id.toString() : `fallback-${index}`)}
+              keyExtractor={(item, index) => item.id.toString()}
               numColumns={3}
               columnWrapperStyle={
                 {

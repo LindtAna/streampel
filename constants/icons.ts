@@ -5,6 +5,7 @@ import arrow from "@/assets/icons/arrow.png";
 import guest from "@/assets/icons/guest.png";
 import home from "@/assets/icons/home.png";
 import logo from "@/assets/icons/logo.png";
+import NotSaved from "@/assets/icons/notSaved.png";
 import person from "@/assets/icons/person.png";
 import save from "@/assets/icons/save.png";
 import saveMovie from "@/assets/icons/saveMovie.png";
@@ -21,5 +22,6 @@ export const icons = {
   star,
   arrow,
   guest,
-  saveMovie
+  saveMovie,
+  NotSaved
 };

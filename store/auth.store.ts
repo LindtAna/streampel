@@ -2,20 +2,11 @@ import { getCurrentUser } from '@/services/appwrite';
 import { create } from 'zustand';
 
 // Beschreibung der Struktur des Benutzerobjekts
-// interface User {
-//     accountId?: string;
-//     name: string;
-//     email: string;
-//     avatar?: string;
-// }
-
 interface User {
-    $id: string;  // User ID из Auth
+    accountId?: string;
     name: string;
     email: string;
-    registration: string;  // (Joined)
-    status: string;  // Status ( Unverified)
-    avatar?: string;  // avatar
+    avatar?: string;
 }
 
 // Beschreibung des Authentifizierungsstatus im Zustand-Speicher

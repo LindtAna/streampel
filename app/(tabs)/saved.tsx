@@ -53,7 +53,8 @@ const Saved = () => {
     );
   }
 
-  // Rendern des Bildschirms abhängig vom Authentifizierungsstatus
+
+// Rendern des Bildschirms abhängig vom Authentifizierungsstatus
   return (
 
     // Hauptcontainer
@@ -74,10 +75,12 @@ const Saved = () => {
             {/* Verschachtelte Bedingung: Wenn keine gespeicherten Filme vorhanden sind, wird eine Nachricht "keine Filme" angezeigt */}
             {movies.length === 0 ? (
               <>
+              <View className="flex-1 flex-col justify-center gap-5 mt-20 pb-10 px-5 items-center">
                 <Image source={icons.saveMovie} className="size-10" tintColor="#fff" />
                 <Text className="text-gray-500 text-base text-center">
                   Du hast noch keine Filme gespeichert.
                 </Text>
+                </View>
               </>
             ) : (
               // Wenn Filme vorhanden sind: FlatList zur Anzeige der Liste in 3 Spalten
@@ -120,16 +123,16 @@ const Saved = () => {
           <>
             {/* Wenn nicht authentifiziert -> Gast -> Einladung zur Registrierung oder Anmeldung, um Filme zu speichern */}
            <View className="flex-1 flex-col justify-center gap-5 mt-20 pb-10 px-5 items-center">
-            <Image source={icons.save} className="size-10" tintColor="#A8B5DB" />
+            <Image source={icons.NotSaved} className="size-10"/>
             <Text className="text-light-200 text-base">Saved</Text>
-            <Text className="text-light-200 text-base text-center">
+            {/* <Text className="text-light-200 text-base text-center">
               Um Filme zu speichern, melde dich bitte an oder erstelle ein Konto.
-            </Text>
+            </Text> */}
             {/* Weiterleitung zur Anmeldeseite */}
-            <View className="w-full px-10">
+            {/* <View className="w-full px-10">
               <CustomButton
                 title="Einloggen" onPress={() => router.push("/sign-in")} />
-            </View>
+            </View> */}
             </View>
           </>
         )}

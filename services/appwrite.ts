@@ -7,8 +7,8 @@ const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
 const COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
 // ID der Datenbank für Benutzer
 // ID der Tabelle für Benutzerdaten
-// const DATABASE_USERS_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_USER_ID!;
-// const COLLECTION_USERS_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_USER_ID!;
+const DATABASE_USERS_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_USER_ID!;
+const COLLECTION_USERS_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_USER_ID!;
 
 // ID der Tabelle für Filme, die von registrierten Benutzern in saved gespeichert wurden
 const SAVED_COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_SAVED_COLLECTION_ID!;
@@ -18,17 +18,15 @@ const SAVED_COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_SAVED_COLLECTION_ID
 // Festlegen der Projekt-ID aus .env
 // Festlegen der Plattform der App
 const client = new Client()
-    .setEndpoint('https://fra.cloud.appwrite.io/v1')
+    .setEndpoint('https://cloud.appwrite.io/v1')
     .setProject(process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!)
-    .setPlatform('streampel.vercel.app')
-    // .setSession('');
+    .setPlatform('com.lindtana.streampel')
 
 // Initialisierung von Objekten für die Arbeit mit Konten, Datenbank und Avataren
 export const account = new Account(client)
 const database = new Databases(client);
 const avatars = new Avatars(client)
 
-console.log('PROJECT_ID:', process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID);
 
 //////// SPEICHERN DER SUCHANFRAGEN DES BENUTZERS IN EINER DATENBANK /////////
 
@@ -105,20 +103,11 @@ interface SignInParams {
     password: string;
 }
 
-// interface User {
-//     accountId?: string;
-//     name: string;
-//     email: string;
-//     avatar?: string;
-// }
-
 interface User {
-    $id: string;  // User ID из Auth
+    accountId?: string;
     name: string;
     email: string;
-    registration: string;  // (Joined)
-    status: string;  // Status ( Unverified)
-    avatar?: string;  // avatar
+    avatar?: string;
 }
 
 // Erstellung eines neuen Kontos in Appwrite mit einer eindeutigen ID, E-Mail, Passwort und Namen
@@ -126,51 +115,34 @@ interface User {
 export const createUser = async ({ email, password, name }: CreateUserParams) => {
     try {
         const newAccount = await account.create(ID.unique(), email, password, name)
-        if (!newAccount) throw Error('Failed to create account');
+        if (!newAccount) throw Error;
 
         await signIn({ email, password });
 
         const avatarUrl = avatars.getInitialsURL(name);
 
-    //     return await database.createDocument(
-    //         DATABASE_USERS_ID,
-    //         COLLECTION_USERS_ID,
-    //         ID.unique(),
-    //         {
-    //             accountId: newAccount.$id,
-    //             email,
-    //             name,
-    //             password, // später entfernen!!!
-    //             avatar: avatarUrl
-    //         });
-
-    // get current user from Auth of Appwrite
-        const currentUser = await account.get();
-
-        // object User
-        return {
-            $id: currentUser.$id,
-            name: currentUser.name,
-            email: currentUser.email,
-            registration: currentUser.registration, 
-            status: currentUser.status, 
-            avatar: avatarUrl
-        };
+        return await database.createDocument(
+            DATABASE_USERS_ID,
+            COLLECTION_USERS_ID,
+            ID.unique(),
+            {
+                accountId: newAccount.$id,
+                email,
+                name,
+                password, // später entfernen!!!
+                avatar: avatarUrl
+            });
 
 
     } catch (er) {
         throw new Error(er as string);
     }
-
-
 }
 
 // Anmeldung eines bestehenden Benutzers im System
 export const signIn = async ({ email, password }: SignInParams) => {
     try {
       const session = await account.createEmailPasswordSession(email, password);
-      localStorage.setItem('appwrite_session', session.$id);
-      return session;
     } catch (er) {
         throw new Error(er as string);
     }
@@ -179,63 +151,33 @@ export const signIn = async ({ email, password }: SignInParams) => {
 // Abrufen von Informationen über den aktuellen Benutzer
 // Abrufen der Daten des aktuellen Kontos, Suche nach dem Benutzereintrag in der Datenbank anhand der Konto-ID
 export const getCurrentUser = async () => {
-// try {
-//     // checken, ob es eine aktive Sitzung gibt
-//     try {
-//       await account.getSession('current');
-//     } catch (e) {
-//       //// Wenn keine Sitzung -> null (Gast)
-//       return null;
-//     }
-
-
-//     const currentAccount = await account.get()
-//     if (!currentAccount) return null;
-//     const currentUser = await database.listDocuments(
-//         DATABASE_USERS_ID,
-//         COLLECTION_USERS_ID,
-//         [Query.equal("accountId", currentAccount.$id)]
-//     )
-//     if (!currentUser.documents.length) return null;
-//     return currentUser.documents[0];    
-//     } 
-
 try {
-        
-        await account.getSession('current');
+    // checken, ob es eine aktive Sitzung gibt
+    try {
+      await account.getSession('current');
+    } catch (e) {
+      //// Wenn keine Sitzung -> null (Gast)
+      return null;
+    }
 
-        // user data from Auth
-        const currentUser = await account.get();
-
-        if (!currentUser) return null;
-
-        const avatarUrl = avatars.getInitialsURL(currentUser.name);
-
-        // return object User
-        return {
-            $id: currentUser.$id,
-            name: currentUser.name,
-            email: currentUser.email,
-            registration: currentUser.registration,
-            status: currentUser.status,
-            avatar: avatarUrl
-        };
-
-       } catch (err: any) {
+// try{
+    const currentAccount = await account.get()
+    if (!currentAccount) return null;
+    // if(!currentAccount) throw Error;
+    const currentUser = await database.listDocuments(
+        DATABASE_USERS_ID,
+        COLLECTION_USERS_ID,
+        [Query.equal("accountId", currentAccount.$id)]
+    )
+    if (!currentUser.documents.length) return null;
+    // if(!currentUser) throw Error;
+    return currentUser.documents[0];    
+    } catch (err: any) {
     console.log('getCurrentUser: No session or error:', err.message);
     return null; 
     }
-
 };
-
-const sessionId = localStorage.getItem('appwrite_session');
-if (sessionId) {
-    try {
-        await account.getSession(sessionId);
-    } catch {
-        localStorage.removeItem('appwrite_session');
-    }
-}
+// }catch (er) throw new Error(er as string;}
 
 
 
@@ -291,8 +233,6 @@ export const saveMovie = async (userAccountId: string, movie: Movie | MovieDetai
 
 // Entfernt einen Film aus der Liste der gespeicherten Filme eines bestimmten Benutzers
 // Nimmt userAccountId (ID des Benutzerkontos) und movieId (ID des Films aus der TMDB API) entgegen
-
-// upd Nimmt userAccountId ($id из Auth) und movie-Objekt
 export const removeMovie = async (userAccountId: string, movieId: number) => {
   try {
    // Suche nach einem Dokument in der Sammlung SAVED_COLLECTION_ID, das den angegebenen userId und movieId entspricht

@@ -103,7 +103,7 @@ useEffect(() => {
               <TouchableOpacity onPress={handleSaveToggle} disabled={isToggling}>
                 <Image
                   source={icons.saveMovie}
-                  className="size-4"
+                  className="size-10"
                   tintColor={isSaved ? "#f6b40a" : "#faffff"}
                 />
               </TouchableOpacity>
@@ -154,7 +154,7 @@ useEffect(() => {
                 leftIcon={
                     <Image
                         source={icons.arrow}
-                        className="size-2 mr-1 mt-0.5 rotate-180"
+                        className="size-8 mr-1 mt-0.5 rotate-180"
                         tintColor="#bddeff"
                     />
                 }

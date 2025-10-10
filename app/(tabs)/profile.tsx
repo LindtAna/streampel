@@ -7,7 +7,6 @@ import { router } from "expo-router";
 import { Image, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-
 const Profile = () => {
   // Daten aus auth.store extrahieren -> Benutzer, Ladezustand und Authentifizierung
   const { user, isLoading, isAuthenticated, setUser, setIsAuthenticated } = useAuthStore(); 
@@ -73,12 +72,12 @@ Leitet zur Anmeldeseite weiter */}
             <Image source={icons.guest} className="w-20 h-20"/>
            
             <Text className="text-white text-xl font-bold">♡ willkommen!</Text>
-            <Text className="text-light-200 text-base text-center">
+            {/* <Text className="text-light-200 text-base text-center">
               Um Filme zu speichern und auf dein Profil zuzugreifen, melde dich bitte an oder erstelle ein Konto.
-            </Text>
+            </Text> */}
 
             {/* Weiterleitung zur Anmeldeseite */}
-            <CustomButton title="Einloggen" onPress={() => router.push("/sign-in")} />
+            {/* <CustomButton title="Einloggen" onPress={() => router.push("/sign-in")} /> */}
           </>
         )}
       </View>
