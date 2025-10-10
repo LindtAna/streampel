@@ -13,11 +13,14 @@ In der Live-Demo-Version ist aufgrund der Einschränkungen der kostenlosen Versi
 
 Im vorhandenen Project ist jedoch auch die Möglichkeit zur Registrierung und Authentifizierung von Benutzern sowie die Funktion für registrierte Benutzer implementiert, Filme auf der Seite „Saved“ in Lesezeichen zu speichern. Dieser Funktionalität kann im untenstehenden Demo-Video angesehen werden.
 
-Demo Registrierung und Authentifizierung
-([https://github.com/LindtAna/streampel/blob/main/demo%20auth.gif](https://github.com/LindtAna/streampel/blob/main/demo%20auth.gif)
+Demo Registrierung und Authentifizierung 
+
+![Demo Registrierung und Authentifizierung ]([https://github.com/LindtAna/streampel/blob/main/demo%20auth.gif](https://github.com/LindtAna/streampel/blob/main/demo%20auth.gif)
+
 
 Demo Filme speichern
-(https://github.com/LindtAna/streampel/blob/main/demo%20save%20movie.gif)
+
+![Demo Filme speichern](https://github.com/LindtAna/streampel/blob/main/demo%20save%20movie.gif)
 
 ---
 
