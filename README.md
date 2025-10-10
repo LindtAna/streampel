@@ -29,11 +29,10 @@ Demo Filme speichern
 Die Benutzeroberfläche ist **responsiv** und **modular** aufgebaut.
 
 ### Design in Figma
-
+Das UI-Design wurde im Verlauf der Entwicklung von mir angepasst und weiterentwickelt, um eine bessere visuelle Darstellung zu erzielen.
 Das UI-Design basiert auf dem folgenden Figma-Template:  
 [STREAMPEL](https://www.figma.com/design/c6NHYQem8G59odVSijIjl2/Movie-App-w--React-Native?node-id=108001-11&t=HFwNNqPSze4JROQ6-0)
 
-Der UI-Design wurde im Verlauf der Entwicklung von mir angepasst und weiterentwickelt, um eine bessere visuelle Darstellung zu erzielen.
 ---
 
 ## Funktionalität
