@@ -1,8 +1,0 @@
-{
-  "rewrites": [
-    {
-      "source": "/v1/:match*",
-      "destination": "https://fra.cloud.appwrite.io/v1/:match*"
-    }
-  ]
-}
