@@ -43,11 +43,20 @@ const COLLECTION_USERS_ID =
 const SAVED_COLLECTION_ID =
   process.env.EXPO_PUBLIC_APPWRITE_SAVED_COLLECTION_ID!;
 
-// Appwrite-Client initialisieren
+// Bestimmung des Endpunkts abhängig von der Plattform
+// Web -> relativen Pfad, der von Vercel als Proxy verwendet wird
 // De-Region(franfurt): https://fra.cloud.appwrite.io/v1
+const getEndpoint = () => {
+  if (Platform.OS === "web" && typeof window !== "undefined") {
+    return `${window.location.origin}/v1`;
+  }
+  return "https://fra.cloud.appwrite.io/v1";
+};
+
+// Appwrite-Client initialisieren
 // setPlatform nur für mobile Plattformen
 const clientInstance = new Client()
-  .setEndpoint("https://fra.cloud.appwrite.io/v1")
+  .setEndpoint(getEndpoint())
   .setProject(process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!);
 
 if (Platform.OS === "web") {
