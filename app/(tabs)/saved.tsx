@@ -13,15 +13,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 // Definition des funktionalen Komponents Saved — Bildschirm zur Anzeige der gespeicherten Filme des Benutzers
 // Wenn der Benutzer nicht authentifiziert ist, wird ein Bildschirm für Gäste mit einer Einladung zur Anmeldung angezeigt
 const Saved = () => {
-
   // Array der gespeicherten Filme, initialisiert mit einem leeren Array
   // Wird verwendet, um die Liste der Filme in der FlatList zu speichern und anzuzeigen
   const [movies, setMovies] = useState<any[]>([]);
-
-  // Lokaler Zustand loading — Flag für das Laden von Daten, initialisiert mit false
-  // Wird verwendet, um einen Ladeindikator während der Datenbankabfrage anzuzeigen
   const [loading, setLoading] = useState(false);
-
   // Extrahieren von Daten aus dem Zustand-Authentifizierungs-Store
   // isAuthenticated — Boolean-Flag, das angibt, ob der Benutzer authentifiziert ist
   const { user, isLoading: authLoading, isAuthenticated } = useAuthStore();
@@ -31,7 +26,6 @@ const Saved = () => {
   // user && isAuthenticated -> Überprüfung, dass ein Benutzer existiert und authentifiziert ist — nur dann werden die Daten geladen
   // listSavedMovies mit der ID des Benutzerkontos -> Abrufen der Liste aus der Datenbank
   // .then — bei Erfolg wird der Zustand movies mit dem Array der gespeicherten Filme aktualisiert
-  // .finally — setzt den Lade-Flag immer auf false, nachdem die Abfrage abgeschlossen ist
   useFocusEffect(
     useCallback(() => {
       if (user && isAuthenticated) {
@@ -40,11 +34,10 @@ const Saved = () => {
           .then((saved) => setMovies(saved))
           .finally(() => setLoading(false));
       }
-    }, [user, isAuthenticated])
+    }, [user, isAuthenticated]),
   );
 
-  // Bedingung: Wenn die Authentifizierung (authLoading) oder das Laden der Daten (loading) läuft,
-  // wird ein einfacher Bildschirm mit dem Text "Loading..." zur Anzeige des Prozesses angezeigt
+  //Wenn die Authentifizierung (authLoading) oder das Laden der Daten (loading) läuft, wird ein einfacher Bildschirm mit dem Text "Loading..." zur Anzeige des Prozesses angezeigt
   if (authLoading || loading) {
     return (
       <SafeAreaView className="flex-1 justify-center items-center bg-dark-200">
@@ -53,37 +46,39 @@ const Saved = () => {
     );
   }
 
-
-// Rendern des Bildschirms abhängig vom Authentifizierungsstatus
   return (
-
     // Hauptcontainer
     <View className="bg-primary flex-1">
       {/* hintergrund */}
       <Image source={images.bg} className="absolute w-full z-0" />
 
-      <ScrollView className="flex-1 px-2"
+      <ScrollView
+        className="flex-1 px-2"
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ minHeight: '100%', paddingBottom: 10 }}>
-
+        contentContainerStyle={{ minHeight: "100%", paddingBottom: 10 }}
+      >
         <Image source={icons.logo} className="w-17 h-10 mt-20 mb-5 mx-auto" />
+
         {/* Bedingtes Rendern: Wenn der Benutzer authentifiziert ist -> Anzeige der Liste gespeicherter Filme;
             sonst — Bildschirm für Gäste */}
-
         {user && isAuthenticated ? (
           <>
-            {/* Verschachtelte Bedingung: Wenn keine gespeicherten Filme vorhanden sind, wird eine Nachricht "keine Filme" angezeigt */}
+            {/* Verschachtelte Bedingung: Wenn keine gespeicherten Filme vorhanden sind*/}
             {movies.length === 0 ? (
               <>
-              <View className="flex-1 flex-col justify-center gap-5 mt-20 pb-10 px-5 items-center">
-                <Image source={icons.saveMovie} className="size-10" tintColor="#fff" />
-                <Text className="text-gray-500 text-base text-center">
-                  Du hast noch keine Filme gespeichert.
-                </Text>
+                <View className="flex-1 flex-col justify-center gap-5 mt-20 pb-10 px-5 items-center">
+                  <Image
+                    source={icons.saveMovie}
+                    className="size-10"
+                    tintColor="#fff"
+                  />
+                  <Text className="text-gray-500 text-base text-center">
+                    Du hast noch keine Filme gespeichert.
+                  </Text>
                 </View>
               </>
             ) : (
-              // Wenn Filme vorhanden sind: FlatList zur Anzeige der Liste in 3 Spalten
+              // FlatList zur Anzeige der Liste in 3 Spalten
               // data — Array movies für das Rendern
               // renderItem — Funktion zum Rendern jeder Filmkarte: Übergibt Daten an MovieCard
               // keyExtractor — eindeutiger Schlüssel für jedes Element (ID des Dokuments aus Appwrite)
@@ -122,25 +117,26 @@ const Saved = () => {
         ) : (
           <>
             {/* Wenn nicht authentifiziert -> Gast -> Einladung zur Registrierung oder Anmeldung, um Filme zu speichern */}
-           <View className="flex-1 flex-col justify-center gap-5 mt-20 pb-10 px-5 items-center">
-            <Image source={icons.NotSaved} className="size-10"/>
-            <Text className="text-light-200 text-base">Saved</Text>
-            {/* <Text className="text-light-200 text-base text-center">
-              Um Filme zu speichern, melde dich bitte an oder erstelle ein Konto.
-            </Text> */}
-            {/* Weiterleitung zur Anmeldeseite */}
-            {/* <View className="w-full px-10">
-              <CustomButton
-                title="Einloggen" onPress={() => router.push("/sign-in")} />
-            </View> */}
+            <View className="flex-1 flex-col justify-center gap-5 mt-20 pb-10 px-5 items-center">
+              <Image source={icons.NotSaved} className="size-10" />
+              <Text className="text-light-200 text-base">Saved</Text>
+              <Text className="text-light-200 text-base text-center">
+                Um Filme zu speichern, melde dich bitte an oder erstelle ein
+                Konto.
+              </Text>
+              {/* Weiterleitung zur Anmeldeseite */}
+              <View className="w-full px-10">
+                <CustomButton
+                  title="Einloggen"
+                  onPress={() => router.push("/sign-in")}
+                />
+              </View>
             </View>
           </>
         )}
-
-      </ScrollView >
+      </ScrollView>
     </View>
   );
 };
 
 export default Saved;
-

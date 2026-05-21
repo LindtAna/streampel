@@ -3,7 +3,7 @@ import CustomInput from "@/components/CustomInput";
 import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
 import { signIn } from "@/services/appwrite";
-import useAuthStore from "@/store/auth.store"; 
+import useAuthStore from "@/store/auth.store";
 import * as Sentry from "@sentry/react-native";
 import { Link, router } from "expo-router";
 import { useState } from "react";
@@ -12,12 +12,16 @@ import { Alert, Image, Text, View } from "react-native";
 // Anmeldung eines bestehenden Benutzers
 const SignIn = () => {
   const [isSubmitting, setIsSubmitting] = useState(false); // Zustand zur Verfolgung des Formularübermittlungsprozesses (true — wird gesendet, false — nicht)
-  const [form, setForm] = useState({ email: '', password: '' }); // Zustand, um die Formulardaten zu speichern (E-Mail, Passwort)
+  const [form, setForm] = useState({ email: "", password: "" }); // Zustand, um die Formulardaten zu speichern (E-Mail, Passwort)
 
   // Funktion zur Verarbeitung der Formularübermittlung
   // Überprüfung, ob alle Formularfelder ausgefüllt sind
   const submit = async () => {
-    if (!form.email || !form.password) return Alert.alert('Error', 'Please Enter valid email address and password');
+    if (!form.email || !form.password)
+      return Alert.alert(
+        "Error",
+        "Please Enter valid email address and password",
+      );
 
     // Setze isSubmitting auf true, um den Ladeindikator anzuzeigen
     setIsSubmitting(true);
@@ -25,13 +29,13 @@ const SignIn = () => {
     // Aufruf der Anmeldefunktion von Appwrite (Backend-Service)
     // Aktualisierung des Zustands des Zustand-Speichers (useAuthStore)
     // Weiterleitung zur Profilseite (replace verhindert das Zurückkehren)
-    // In jedem Fall (Erfolg oder Fehler) wird der Ladeindikator entfernt 
+    // In jedem Fall (Erfolg oder Fehler) wird der Ladeindikator entfernt
     try {
       await signIn({ email: form.email, password: form.password });
-      await useAuthStore.getState().fetchAuthenticatedUser(); 
-      router.replace('/(tabs)/profile'); 
+      await useAuthStore.getState().fetchAuthenticatedUser();
+      router.replace("/(tabs)/profile");
     } catch (error: any) {
-      Alert.alert('Error', error.message);
+      Alert.alert("Error", error.message);
       Sentry.captureEvent(error);
     } finally {
       setIsSubmitting(false);
@@ -47,7 +51,7 @@ const SignIn = () => {
         <Image source={icons.logo} className="w-37 h-15" />
       </View>
 
-{/* Anmeldenform container */}
+      {/* Anmeldenform container */}
       <View className="gap-7 bg-dark-200/60 rounded-lg px-7 py-5 m-5">
         <CustomInput
           placeholder="E-Mail eingeben"
@@ -59,7 +63,9 @@ const SignIn = () => {
         <CustomInput
           placeholder="Passwort eingeben"
           value={form.password}
-          onChangeText={(text) => setForm((prev) => ({ ...prev, password: text }))}
+          onChangeText={(text) =>
+            setForm((prev) => ({ ...prev, password: text }))
+          }
           label="Password"
           secureTextEntry={true}
         />
@@ -74,7 +80,9 @@ const SignIn = () => {
           <Text className="text-light-200 text-lg font-bold">
             Hast du noch kein Konto?
           </Text>
-          <Link href="/sign-up" className="text-lg font-bold color-yellow-500">Registrier dich!</Link>
+          <Link href="/sign-up" className="text-lg font-bold color-yellow-500">
+            Registrier dich!
+          </Link>
         </View>
       </View>
     </View>

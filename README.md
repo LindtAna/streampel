@@ -1,26 +1,6 @@
-
 # Streampel
 
 [Live Demo](https://streampel.vercel.app)
-
-Hinweis: Die Navigation der horizontalen Karussellleiste oben auf der Seite erfolgt über die Pfeiltasten (rechts und links) der Tastatur.
-
-Die mit Expo, TypeScript und Tailwind CSS erstellte mobile App ruft Filme ab und erstellt mit Appwrite einen Popularitätsalgorithmus.
-Sie bewertet Filme anhand verschiedener Engagement-Kennzahlen.
-
-In der Live-Demo-Version ist aufgrund der Einschränkungen der kostenlosen Version von BaaS Appwrite nur der Modus für nicht authentifizierte Benutzer verfügbar.
-
-
-Im vorhandenen Project ist jedoch auch die Möglichkeit zur Registrierung und Authentifizierung von Benutzern sowie die Funktion für registrierte Benutzer implementiert, Filme auf der Seite „Saved“ in Lesezeichen zu speichern. Dieser Funktionalität kann im untenstehenden Demo-Video angesehen werden.
-
-Demo Registrierung und Authentifizierung 
-
-![Demo Registrierung und Authentifizierung ](https://github.com/LindtAna/streampel/blob/main/demo%20auth.gif)
-
-
-Demo Filme speichern
-
-![Demo Filme speichern](https://github.com/LindtAna/streampel/blob/main/demo%20save%20movie.gif)
 
 ---
 
@@ -29,6 +9,7 @@ Demo Filme speichern
 Die Benutzeroberfläche ist **responsiv** und **modular** aufgebaut.
 
 ### Design in Figma
+
 Das UI-Design wurde im Verlauf der Entwicklung von mir angepasst und weiterentwickelt, um eine bessere visuelle Darstellung zu erzielen.
 Das UI-Design basiert auf dem folgenden Figma-Template:  
 [STREAMPEL](https://www.figma.com/design/c6NHYQem8G59odVSijIjl2/Movie-App-w--React-Native?node-id=108001-11&t=HFwNNqPSze4JROQ6-0)
@@ -36,6 +17,7 @@ Das UI-Design basiert auf dem folgenden Figma-Template:
 ---
 
 ## Funktionalität
+
 - Echtzeitdaten: Abrufen und Anzeigen von Filmdaten in Echtzeit
 - Startseite: Empfohlene Filme und Filme entdecken
 - Suchseite: Suchen Sie nach Ihren Lieblingsfilmen
@@ -46,6 +28,7 @@ Das UI-Design basiert auf dem folgenden Figma-Template:
 ---
 
 ## Projektstruktur
+
 ```text
 streampel/
 ├─ app/
@@ -103,14 +86,12 @@ streampel/
 
 ## Technologie-Stack
 
-| Technologie   | Beschreibung                                                                                                                                                                   |
-|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Expo          | Open-Source-Plattform zum Erstellen universeller nativer Apps (Android, iOS, Web) mit JavaScript/TypeScript und React Native.        |
-| React Native       | Ein Framework zum Erstellen mobiler Benutzeroberflächen mit React. Es ermöglicht komponentenbasierte, plattformübergreifende Entwicklung mit deklarativer Benutzeroberfläche, umfassender nativer API-Unterstützung und ist eng mit Expo für Navigation und native Funktionen integriert.     |
-| Tailwind CSS | Utility-First-CSS-Framework, das Low-Level-Klassen direkt im HTML erlaubt und den Designprozess beschleunigt                                                                          |
-| Appwrite         | Open-Source-Backend-as-a-Service-Plattform, die sichere Authentifizierung (E-Mail/Passwort, OAuth, SMS, Magic Links), Datenbanken und Dateispeicher mit Komprimierung/Verschlüsselung bietet. Die Verwaltung erfolgt über eine einheitliche Konsole und eine Microservices-Architektur.                                                   |
-
-
+| Technologie  | Beschreibung                                                                                                                                                                                                                                                                              |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Expo         | Open-Source-Plattform zum Erstellen universeller nativer Apps (Android, iOS, Web) mit JavaScript/TypeScript und React Native.                                                                                                                                                             |
+| React Native | Ein Framework zum Erstellen mobiler Benutzeroberflächen mit React. Es ermöglicht komponentenbasierte, plattformübergreifende Entwicklung mit deklarativer Benutzeroberfläche, umfassender nativer API-Unterstützung und ist eng mit Expo für Navigation und native Funktionen integriert. |
+| Tailwind CSS | Utility-First-CSS-Framework, das Low-Level-Klassen direkt im HTML erlaubt und den Designprozess beschleunigt                                                                                                                                                                              |
+| Appwrite     | Open-Source-Backend-as-a-Service-Plattform, die sichere Authentifizierung (E-Mail/Passwort, OAuth, SMS, Magic Links), Datenbanken und Dateispeicher mit Komprimierung/Verschlüsselung bietet. Die Verwaltung erfolgt über eine einheitliche Konsole und eine Microservices-Architektur.   |
 
 ## Dokumentation der verwendeten Frameworks und Bibliotheken
 
