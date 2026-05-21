@@ -50,6 +50,10 @@ const clientInstance = new Client()
   .setEndpoint("https://fra.cloud.appwrite.io/v1")
   .setProject(process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!);
 
+if (Platform.OS === "web") {
+  clientInstance.setSelfSigned(false);
+}
+
 if (Platform.OS !== "web") {
   clientInstance.setPlatform("com.lindtana.streampel");
 }
@@ -147,9 +151,12 @@ export const createUser = async ({
 }: CreateUserParams) => {
   try {
     const newAccount = await account.create(ID.unique(), email, password, name);
-    if (!newAccount) throw Error;
+    if (!newAccount) throw new Error("Failed to create account");
+
+    console.log("Account created:", newAccount.$id);
 
     await signIn({ email, password });
+    console.log("User signed in");
 
     const avatarUrl = avatars.getInitialsURL(name);
 
@@ -161,7 +168,7 @@ export const createUser = async ({
         accountId: newAccount.$id,
         email,
         name,
-        password, // später entfernen!!!
+        // password, // später entfernen!!!
         avatar: avatarUrl,
       },
     );

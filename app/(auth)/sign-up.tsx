@@ -18,8 +18,15 @@ const SignUp = () => {
     if (!form.name || !form.email || !form.password)
       return Alert.alert(
         "Error",
-        "Please Enter valid email address and password",
+        "Bitte gib gültige Email-Adresse und Password ein",
       );
+
+    if (form.password.length < 8) {
+      return Alert.alert(
+        "Fehler",
+        "Passwort muss mindestens 8 Zeichen lang sein",
+      );
+    }
 
     setIsSubmitting(true);
 
@@ -35,7 +42,21 @@ const SignUp = () => {
       await useAuthStore.getState().fetchAuthenticatedUser();
       router.replace("/(tabs)/profile");
     } catch (error: any) {
-      Alert.alert("Error", error.message);
+      Alert.alert("Registration error:", error.message);
+
+      if (
+        error.message?.includes("409") ||
+        error.message?.includes("already exists")
+      ) {
+        Alert.alert(
+          "Fehler",
+          "Ein Benutzer mit dieser Email-Adresse existiert bereits. Bitte melde dich stattdessen an.",
+        );
+      } else if (error.message?.includes("password")) {
+        Alert.alert("Fehler", "Passwort muss mindestens 8 Zeichen lang sein");
+      } else {
+        Alert.alert("Fehler", error.message || "Registrierung fehlgeschlagen");
+      }
     } finally {
       setIsSubmitting(false);
     }
