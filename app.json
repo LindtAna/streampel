@@ -9,9 +9,9 @@
     "scheme": "movies",
     "userInterfaceStyle": "dark",
     "splash": {
-        "backgroundColor": "#030014",
-        "image": "./assets/images/logo.png"
-      },
+      "backgroundColor": "#030014",
+      "image": "./assets/images/logo.png"
+    },
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
@@ -33,7 +33,7 @@
     },
     "web": {
       "bundler": "metro",
-      "output": "static",
+      "output": "single",
       "favicon": "./assets/images/logo.png"
     },
     "plugins": [
@@ -60,13 +60,13 @@
         }
       ],
       [
-      "@sentry/react-native/expo",
-      {
-        "url": "https://sentry.io/",
-        "project": "streampel",
-        "organization": "lindtana-vd"
-      }
-    ]
+        "@sentry/react-native/expo",
+        {
+          "url": "https://sentry.io/",
+          "project": "streampel",
+          "organization": "lindtana-vd"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

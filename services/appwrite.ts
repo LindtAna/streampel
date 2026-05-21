@@ -59,10 +59,6 @@ const clientInstance = new Client()
   .setEndpoint(getEndpoint())
   .setProject(process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!);
 
-if (Platform.OS === "web") {
-  clientInstance.setSelfSigned(false);
-}
-
 if (Platform.OS !== "web") {
   clientInstance.setPlatform("com.lindtana.streampel");
 }
